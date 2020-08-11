@@ -14,16 +14,16 @@ export default {
     games: []
   }),
   methods: {
-    getGames () {
+    getTournaments () {
       this.$http
-        .get(this.$serverUrl + '/getGames')
+        .get(this.$serverUrl + '/tournaments')
         .then((result) => {
           this.games = result.data
         })
     }
   },
   beforeMount () {
-    this.getGames()
+    this.getTournaments()
     // this.getLastTournaments()
   }
 }

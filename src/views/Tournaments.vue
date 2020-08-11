@@ -43,7 +43,7 @@ export default {
   methods: {
     getTournaments () {
       this.$http
-        .get(this.$serverUrl + '/getAllTournaments')
+        .get(this.$serverUrl + '/tournaments')
         .then((result) => {
           this.tournaments = result.data
         })

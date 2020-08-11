@@ -5,7 +5,7 @@ import vuetify from './plugins/vuetify'
 import axios from 'axios'
 
 // Variable global de vue, $ est la convention Vuejs pour évité de se perdre
-Vue.prototype.$serverUrl = `http://localhost:5000/api`
+Vue.prototype.$serverUrl = `http://localhost:${process.env.PORT || 5000}/api`
 Vue.prototype.$http = axios
 Vue.prototype.$webSiteName = 'Esport community'
 
