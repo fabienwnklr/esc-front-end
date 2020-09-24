@@ -2,10 +2,10 @@
   <v-app>
     <defaultMenu v-if="!userDetected"></defaultMenu>
     <userMenu v-else></userMenu>
-    <v-content>
+    <v-main>
       <router-view></router-view>
       <FooterComponent></FooterComponent>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
@@ -29,7 +29,7 @@ export default {
      */
     detectUser () {
       try {
-        let jwt = JSON.parse(localStorage.getItem('jwt'))
+        let jwt = localStorage.getItem('jwt')
         if (jwt !== null) {
           this.userDetected = true
         } else {

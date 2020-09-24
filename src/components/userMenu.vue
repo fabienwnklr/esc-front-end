@@ -24,9 +24,7 @@
             <v-list-item-action>
               <v-tooltip right :disabled="!mini">
                 <template v-slot:activator="{ on }">
-                  <v-btn icon v-on="on">
-                    <v-icon>{{ item.icon }}</v-icon>
-                  </v-btn>
+                    <v-icon v-on="on">{{ item.icon }}</v-icon>
                 </template>
                 <span>{{ item.text }}</span>
               </v-tooltip>

@@ -1,10 +1,12 @@
 <template>
     <v-container fluid>
-        <v-snackbar bottom v-model="snackbar" :multi-line="true" :timeout="0">
-            {{ this.alert }}
-            <v-btn color="red" icon right @click="resetProp">
-                <v-icon>mdi-close</v-icon>
-            </v-btn>
+        <v-snackbar v-model="snackbar" :multi-line="true">
+            {{ alert }}
+            <template v-slot:action="{ attrs }">
+                <v-btn color="red" icon v-bind="attrs" @click="snackbar = false">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+            </template>
         </v-snackbar>
         <v-row>
             <v-col cols="12" class="mx-auto" lg="6">
@@ -17,8 +19,8 @@
                         <v-card-title>Connexion</v-card-title>
                     </v-img>
 
-                    <v-card-text class="text--primary">
-                        <v-form v-model="valid">
+                    <v-form v-model="valid" ref="loginForm">
+                        <v-card-text class="text--primary">
                             <v-text-field
                                 v-model="email"
                                 :rules="emailRules"
@@ -32,29 +34,24 @@
                                 :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                                 :rules="[rules.required]"
                                 :type="show ? 'text' : 'password'"
-                                name="input-10-1"
+                                name="password"
                                 label="Mot de passe"
                                 counter
                                 @click:append="show = !show"
                             ></v-text-field>
+                        </v-card-text>
 
-                            <v-checkbox
-                                v-model="checkbox"
-                                label="Se souvenir de moi"
-                                color="primary"
-                            ></v-checkbox>
-                        </v-form>
-                    </v-card-text>
-
-                    <v-card-actions>
-                        <v-btn
-                            :disabled="!valid || loading"
-                            color="success"
-                            class="mr-4"
-                            :loading="loading"
-                            @click="validate"
-                        >Log in</v-btn>
-                    </v-card-actions>
+                        <v-card-actions>
+                            <v-btn
+                                :disabled="!valid || loading"
+                                color="success"
+                                class="mr-4"
+                                :loading="loading"
+                                v-on:click="login"
+                                type="submit"
+                            >Connexion</v-btn>
+                        </v-card-actions>
+                    </v-form>
                 </v-card>
             </v-col>
         </v-row>
@@ -68,16 +65,15 @@ export default {
         snackbar: false,
         loading: false,
         valid: false,
-        email: "",
+        email: "fabien.winkler@outlook.fr",
         password: null,
         emailRules: [
-            (v) => !!v || "E-mail is required",
-            (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+            (v) => !!v || "E-mail requis.",
+            (v) => /.+@.+\..+/.test(v) || "E-mail invalide",
         ],
-        checkbox: false,
         show: false,
         rules: {
-            required: (value) => !!value || "Required.",
+            required: (v) => !!v || "Required.",
         },
     }),
 
@@ -87,7 +83,7 @@ export default {
             this.snackbar = false;
             this.loading = false;
         },
-        validate() {
+        login() {
             if (this.valid) {
                 this.resetProp();
                 this.loading = true;

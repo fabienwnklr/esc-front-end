@@ -1,6 +1,13 @@
 <template>
     <v-container fluid>
-        <v-alert dismissible v-if="alert != null" :type="alert.type">{{alert.label}}.</v-alert>
+        <v-snackbar v-model="snackbar" :multi-line="true">
+            {{ alert }}
+            <template v-slot:action="{ attrs }">
+                <v-btn color="red" icon v-bind="attrs" @click="snackbar = false">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+            </template>
+        </v-snackbar>
         <v-row>
             <v-col cols="12" class="mx-auto" lg="6">
                 <v-card>
@@ -12,11 +19,11 @@
                         <v-card-title>Inscription</v-card-title>
                     </v-img>
 
-                    <v-card-text class="text--primary">
-                        <v-form v-model="valid">
+                    <v-form v-model="valid" ref="registerForm">
+                        <v-card-text class="text--primary">
                             <v-text-field
                                 v-model="username"
-                                :rules="usernameRules"
+                                :rules="[rules.required]"
                                 label="Nom d'utilisateur"
                                 name="username"
                                 required
@@ -41,36 +48,37 @@
                                 @click:append="show = !show"
                             ></v-text-field>
 
-                            <!-- <v-text-field
-                  v-model="passwordConfirm"
-                  :append-icon="showConfirm ? 'mdi-eye' : 'mdi-eye-off'"
-                  :rules="[rules.required]"
-                  :type="showConfirm ? 'text' : 'password'"
-                  name="input-10-1"
-                  label="Confirmation du mot de passe"
-                  counter
-                  @click:append="showConfirm = !showConfirm"
-                            ></v-text-field>-->
+                            <v-text-field
+                                v-model="passwordConfirm"
+                                :append-icon="showConfirm ? 'mdi-eye' : 'mdi-eye-off'"
+                                :rules="[rules.required, passwordConfirmationRule]"
+                                :type="showConfirm ? 'text' : 'password'"
+                                name="password-confirm"
+                                label="Confirmation du mot de passe"
+                                counter
+                                @click:append="showConfirm = !showConfirm"
+                            ></v-text-field>
 
                             <v-checkbox
                                 v-model="checkbox"
-                                :rules="[v => !!v || 'You must agree to continue!']"
+                                :rules="[rules.required]"
                                 label="J'accepte les CGU"
                                 required
                                 color="primary"
                             ></v-checkbox>
-                        </v-form>
-                    </v-card-text>
+                        </v-card-text>
 
-                    <v-card-actions>
-                        <v-btn
-                            :disabled="!valid || loading"
-                            color="success"
-                            class="mr-4"
-                            :loading="loading"
-                            @click="validate"
-                        >S'inscrire</v-btn>
-                    </v-card-actions>
+                        <v-card-actions>
+                            <v-btn
+                                :disabled="!valid || loading"
+                                color="success"
+                                class="mr-4"
+                                :loading="loading"
+                                v-on:click="register"
+                                type="submit"
+                            >S'inscrire</v-btn>
+                        </v-card-actions>
+                    </v-form>
                 </v-card>
             </v-col>
         </v-row>
@@ -80,16 +88,15 @@
 <script>
 export default {
     data: () => ({
-        snackbar: false,
         alert: null,
-        valid: false,
+        snackbar: false,
         loading: false,
-        username: "",
-        usernameRules: [(v) => !!v || "Nom d`utilisateur requis"],
-        email: "",
+        valid: false,
+        username: "John",
+        email: "john@doe.fr",
         emailRules: [
-            (value) => !!value || "E-mail is required",
-            (value) => /.+@.+\..+/.test(value) || "E-mail requis",
+            (value) => !!value || "Champs requis",
+            (value) => /.+@.+\..+/.test(value) || "E-mail invalide",
         ],
         checkbox: false,
         show: false,
@@ -97,18 +104,26 @@ export default {
         password: null,
         passwordConfirm: null,
         rules: {
-            required: (value) => !!value || "Mot de passe requis.",
+            required: (value) => !!value || "Champs requis.",
         },
     }),
-
+    computed: {
+        passwordConfirmationRule() {
+            return () =>
+                this.password === this.passwordConfirm ||
+                "Mot de passe différent.";
+        },
+    },
     methods: {
         resetProp() {
             this.alert = null;
             this.snackbar = false;
             this.loading = false;
         },
-        validate() {
+        register() {
             if (this.valid) {
+                this.resetProp();
+                this.loading = true;
                 this.$http
                     .post(this.$serverUrl + "/users/register", {
                         username: this.username,
@@ -116,7 +131,7 @@ export default {
                         password: this.password,
                     })
                     .then((result) => {
-                      console.log(result)
+                        console.log(result);
                         localStorage.setItem(
                             "user",
                             JSON.stringify(result.data.user)
@@ -132,9 +147,7 @@ export default {
                             }
                         }
                     })
-                    .catch(
-                        (err) => console.info(err)
-                    );
+                    .catch((err) => console.info(err));
             }
         },
     },
