@@ -100,7 +100,7 @@ router.beforeEach((to, from, next) => {
           next()
         }
         else {
-          next({ name: 'userboard' })
+          next({ name: 'home' })
         }
       } else {
         next()
@@ -111,7 +111,7 @@ router.beforeEach((to, from, next) => {
       next()
     }
     else {
-      next({ name: 'userboard' })
+      next({ name: 'home' })
     }
   } else {
     next()

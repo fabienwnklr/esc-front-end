@@ -1,10 +1,11 @@
 <template>
   <v-app>
     <defaultMenu v-if="!userDetected"></defaultMenu>
-    <userMenu v-else></userMenu>
+    <userMenu v-else-if="!isAdmin"></userMenu>
+    <adminMenu v-else></adminMenu>
     <v-main>
       <router-view></router-view>
-      <FooterComponent></FooterComponent>
+      <footerComponent></footerComponent>
     </v-main>
   </v-app>
 </template>
@@ -12,15 +13,18 @@
 <script>
 import defaultMenu from './components/defaultMenu'
 import userMenu from './components/userMenu'
-import FooterComponent from './components/Footer'
+import adminMenu from './components/adminMenu'
+import footerComponent from './components/Footer'
 export default {
   components: {
-    FooterComponent,
+    footerComponent,
     defaultMenu,
-    userMenu
+    userMenu,
+    adminMenu,
   },
   data: () => ({
-    userDetected: false
+    userDetected: false,
+    isAdmin: false,
   }),
   methods: {
     /**
@@ -29,8 +33,9 @@ export default {
      */
     detectUser () {
       try {
-        let jwt = localStorage.getItem('jwt')
-        if (jwt !== null) {
+        const jwt = localStorage.getItem('jwt')
+        const user = localStorage.getItem('user')
+        if (jwt !== null && user !== null) {
           this.userDetected = true
         } else {
           this.userDetected = false
@@ -38,6 +43,12 @@ export default {
         }
       } catch (error) {
         console.error(error)
+      }
+    },
+    detectIfIsAdmin () {
+      let user = JSON.parse(localStorage.getItem('user'))
+      if (user !== null && typeof user.is_admin !== 'undefined' && user.is_admin === true) {
+        this.isAdmin = true;
       }
     },
     logout () {
@@ -49,6 +60,7 @@ export default {
   // Fonction appelé à chaque modif du DOM donc pour chaque page
   updated () {
     this.detectUser()
+    this.detectIfIsAdmin()
   }
 }
 </script>

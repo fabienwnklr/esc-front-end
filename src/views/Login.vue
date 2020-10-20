@@ -104,16 +104,16 @@ export default {
                         );
 
                         if (localStorage.getItem("jwt") != null) {
-                            this.$emit("loggedIn");
-                            if (this.$route.params.nextUrl != null) {
-                                this.$router.push(this.$route.params.nextUrl);
+                          if (this.$route.params.nextUrl != null) {
+                            this.$router.push(this.$route.params.nextUrl);
                             } else {
-                                if (is_admin == 1) {
-                                    this.$router.push("/admin");
+                              if (is_admin === true) {
+                                this.$router.push("/admin");
                                 } else {
-                                    this.$router.push("/");
+                                  this.$router.push("/");
                                 }
                             }
+                            this.$emit("logged");
                         }
                     })
                     .catch((err) => {

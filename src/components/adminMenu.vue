@@ -31,7 +31,21 @@
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title class>{{ item.text }}</v-list-item-title>
-              <v-list-item-title @click="disconnect()">Se deconnecter</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+        <template>
+          <v-list-item @click="disconnect">
+            <v-list-item-action>
+              <v-tooltip right :disabled="!mini">
+                <template v-slot:activator="{ on }">
+                    <v-icon v-on="on">mdi-logout</v-icon>
+                </template>
+                <span>Se déconnecter</span>
+              </v-tooltip>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title class>Se déconnecter</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </template>
@@ -42,7 +56,7 @@
 
 <script>
 export default {
-  name: "userMenu",
+  name: "defaultMenu",
   data: () => ({
     drawer: null,
     mini: true,
@@ -54,14 +68,15 @@ export default {
       { icon: 'mdi-twitch', text: 'Live', to: '/live' },
       // { icon: 'mdi-email-send-outline', text: 'Contact', to: '/contact' },
       { heading: 'Compte' },
-      { icon: 'mdi-account', text: 'Mon Profil', to: '/profil' }
+      { icon: 'mdi-account', text: 'Admin dashboad', to: '/admin' },
+      { icon: 'mdi-account', text: 'Mon Profil', to: '/profil' },
     ]
   }),
   methods: {
     disconnect () {
       localStorage.removeItem('user')
       localStorage.removeItem('jwt')
-      this.$router.push('/')
+      this.$router.push('/login')
       this.$emit('logout')
     }
   }
