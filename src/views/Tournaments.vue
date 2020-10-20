@@ -11,8 +11,8 @@
           ></v-img>
         </v-list-item-avatar>
         <v-list-item-content>
-          <v-list-item-title class='headline'>Nom du tournoi</v-list-item-title>
-          <v-list-item-subtitle>créé par Kurt Wagner</v-list-item-subtitle>
+          <v-list-item-title class='headline'>{{ item.name }}</v-list-item-title>
+          <v-list-item-subtitle>créé par {{ item.author }}</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
 

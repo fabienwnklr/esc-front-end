@@ -31,7 +31,21 @@
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title class>{{ item.text }}</v-list-item-title>
-              <v-list-item-title @click="disconnect()">Se deconnecter</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+        <template>
+          <v-list-item @click="disconnect()">
+            <v-list-item-action>
+              <v-tooltip right :disabled="!mini">
+                <template v-slot:activator="{ on }">
+                    <v-icon v-on="on">mdi-logout</v-icon>
+                </template>
+                <span>Se déconnecter</span>
+              </v-tooltip>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title >Se déconnecter</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </template>
@@ -45,7 +59,7 @@ export default {
   name: "userMenu",
   data: () => ({
     drawer: null,
-    mini: true,
+    mini: false,
     items: [
       { heading: 'Principal' },
       { icon: 'mdi-home', text: 'Accueil', to: '/' },
@@ -61,7 +75,7 @@ export default {
     disconnect () {
       localStorage.removeItem('user')
       localStorage.removeItem('jwt')
-      this.$router.push('/')
+      this.$router.push('/login')
       this.$emit('logout')
     }
   }

@@ -35,7 +35,7 @@
           </v-list-item>
         </template>
         <template>
-          <v-list-item @click="disconnect">
+          <v-list-item @click="disconnect()">
             <v-list-item-action>
               <v-tooltip right :disabled="!mini">
                 <template v-slot:activator="{ on }">
@@ -59,7 +59,7 @@ export default {
   name: "defaultMenu",
   data: () => ({
     drawer: null,
-    mini: true,
+    mini: false,
     items: [
       { heading: 'Principal' },
       { icon: 'mdi-home', text: 'Accueil', to: '/' },

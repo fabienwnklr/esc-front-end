@@ -3,7 +3,12 @@
         <v-snackbar v-model="snackbar" :multi-line="true">
             {{ alert }}
             <template v-slot:action="{ attrs }">
-                <v-btn color="red" icon v-bind="attrs" @click="snackbar = false">
+                <v-btn
+                    color="red"
+                    icon
+                    v-bind="attrs"
+                    @click="snackbar = false"
+                >
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
             </template>
@@ -49,7 +54,8 @@
                                 :loading="loading"
                                 v-on:click="login"
                                 type="submit"
-                            >Connexion</v-btn>
+                                >Connexion</v-btn
+                            >
                         </v-card-actions>
                     </v-form>
                 </v-card>
@@ -98,26 +104,23 @@ export default {
                             "user",
                             JSON.stringify(response.data.user)
                         );
-                        localStorage.setItem(
-                            "jwt",
-                            JSON.stringify(response.data.token)
-                        );
+                        localStorage.setItem("jwt", response.data.token);
 
                         if (localStorage.getItem("jwt") != null) {
-                          if (this.$route.params.nextUrl != null) {
-                            this.$router.push(this.$route.params.nextUrl);
+                            if (this.$route.params.nextUrl != null) {
+                                this.$router.push(this.$route.params.nextUrl);
                             } else {
-                              if (is_admin === true) {
-                                this.$router.push("/admin");
+                                if (is_admin === true) {
+                                    this.$router.push("/admin");
                                 } else {
-                                  this.$router.push("/");
+                                    this.$router.push("/");
                                 }
                             }
                             this.$emit("logged");
                         }
                     })
                     .catch((err) => {
-                        console.log(err.response);
+                        console.log(err);
                         this.loading = false;
                         this.alert = err.response.data.message;
                         this.snackbar = true;
