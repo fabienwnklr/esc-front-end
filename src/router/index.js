@@ -5,6 +5,11 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '*',
+    name: 'NotFound',
+    component: () => import('../views/error/404.vue')
+  },
+  {
     path: '/',
     name: 'home',
     component: () => import('../views/Home.vue')
@@ -33,6 +38,11 @@ const routes = [
     component: () => import('../views/Live.vue')
   },
   {
+    path: '/profil',
+    name: 'profil',
+    component: () => import('../views/Account.vue')
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../views/Login.vue'),
@@ -56,33 +66,34 @@ const routes = [
   {
     path: '/admin',
     name: 'admin',
-    component: () => import('../views/back-office/App.vue'),
+    component: () => import('../views/admin/Index.vue'),
     meta: {
       requiresAuth: true,
       is_admin: true
-    }
+    },
+    children: [{
+      path: 'add-platform',
+      name: 'addPlatform',
+      component: () => import('../views/admin/pages/NewPlatform.vue'),
+      meta: {
+        requiresAuth: true,
+        is_admin: true
+      }
+    }, {
+      path: 'add-game',
+      name: 'addGame',
+      component: () => import('../views/admin/pages/NewGame.vue'),
+      meta: {
+        requiresAuth: true,
+        is_admin: true
+      }
+    }]
   },
-  {
-    path: '/admin/new-platform',
-    name: 'new-platform',
-    component: () => import('../views/back-office/views/NewPlatform.vue'),
-    meta: {
-      requiresAuth: true,
-      is_admin: true
-    }
-  },
-  {
-    path: '/admin/new-game',
-    name: 'new-game',
-    component: () => import('../views/back-office/views/NewGame.vue'),
-    meta: {
-      requiresAuth: true,
-      is_admin: true
-    }
-  }
+
 ]
 
 const router = new VueRouter({
+  mode: 'hash',
   routes
 })
 
@@ -92,18 +103,22 @@ router.beforeEach((to, from, next) => {
   const userItem = localStorage.getItem('user')
   let user = userItem !== null ? JSON.parse(userItem) : undefined;
   if (to.matched.some(record => record.meta.requiresAuth)) {
+    // ? TODO : Appeler la requête checkToken ici
     if (localStorage.getItem('jwt') == null) {
       next({
         path: '/login',
-        params: { nextUrl: to.fullPath }
+        params: {
+          nextUrl: to.fullPath
+        }
       })
     } else {
       if (to.matched.some(record => record.meta.is_admin)) {
         if (user !== 'undefined' && user.is_admin == 1) {
           next()
-        }
-        else {
-          next({ name: 'home' })
+        } else {
+          next({
+            name: 'home'
+          })
         }
       } else {
         next()
@@ -112,9 +127,10 @@ router.beforeEach((to, from, next) => {
   } else if (to.matched.some(record => record.meta.guest)) {
     if (localStorage.getItem('jwt') == null) {
       next()
-    }
-    else {
-      next({ name: 'home' })
+    } else {
+      next({
+        name: 'home'
+      })
     }
   } else {
     next()

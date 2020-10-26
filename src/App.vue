@@ -1,8 +1,8 @@
 <template>
     <v-app>
-        <defaultMenu v-if="!userDetected"></defaultMenu>
-        <userMenu v-else-if="!isAdmin"></userMenu>
-        <adminMenu v-else></adminMenu>
+        <defaultMenu v-if="guest"></defaultMenu>
+        <userMenu v-else-if="logged"></userMenu>
+        <adminMenu v-else-if="admin"></adminMenu>
         <v-main>
             <router-view></router-view>
             <footerComponent></footerComponent>
@@ -79,6 +79,24 @@ export default {
     updated() {
         this.detectUser();
     },
+    computed: {
+      guest : {
+        get () {
+          return this.$store.state.guest
+        }
+      },
+      logged: {
+        get () {
+          return this.$store.state.logged;
+        }
+      },
+      admin: {
+        get () {
+          return this.$store.state.admin;
+        }
+      },
+
+    }
 };
 </script>
 

@@ -58,8 +58,7 @@
 export default {
   name: "userMenu",
   data: () => ({
-    drawer: null,
-    mini: false,
+    drawer: true,
     items: [
       { heading: 'Principal' },
       { icon: 'mdi-home', text: 'Accueil', to: '/' },
@@ -78,6 +77,16 @@ export default {
       this.$router.push('/login')
       this.$emit('logout')
     }
-  }
+  },
+   computed: {
+      mini: {
+        get () {
+          return this.$store.state.mini;
+        },
+        set (val) {
+          this.$store.commit('SET_MINI', val)
+        }
+      }
+    }
 };
 </script>

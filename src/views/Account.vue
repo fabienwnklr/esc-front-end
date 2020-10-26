@@ -1,5 +1,5 @@
 <template>
-  <h1>Ajoute une plateform</h1>
+  <h1>My account</h1>
 </template>
 
 <script>
