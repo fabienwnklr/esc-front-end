@@ -1,8 +1,8 @@
 <template>
     <v-app>
         <defaultMenu v-if="guest"></defaultMenu>
-        <userMenu v-else-if="logged"></userMenu>
-        <adminMenu v-else-if="admin"></adminMenu>
+        <userMenu v-else-if="logged && !admin"></userMenu>
+        <adminMenu v-else-if="logged && admin"></adminMenu>
         <v-main>
             <router-view></router-view>
             <footerComponent></footerComponent>
@@ -15,6 +15,8 @@ import defaultMenu from "./components/defaultMenu";
 import userMenu from "./components/userMenu";
 import adminMenu from "./components/adminMenu";
 import footerComponent from "./components/Footer";
+import { authHeader } from './helpers';
+
 export default {
     components: {
         footerComponent,
@@ -23,8 +25,9 @@ export default {
         adminMenu,
     },
     data: () => ({
-      userDetected: false,
-      isAdmin: false
+      guest: true,
+      logged: false,
+      admin: false
     }),
     methods: {
         /**
@@ -39,19 +42,18 @@ export default {
                 if (jwt !== null && user !== null) {
                     this.$http
                         .get(this.$serverUrl + "/checkToken", {
-                            headers: {
-                                Authorize: "Bearer " + jwt,
-                            },
+                            headers: authHeader(),
                         })
                         .then((res) => {
                             // console.table(res)
-                            this.userDetected = true;
+                            this.guest = false;
+                            this.logged = true;
                             if (
                                 user !== null &&
                                 typeof user.is_admin !== "undefined" &&
                                 user.is_admin === true
                             ) {
-                                this.isAdmin = true;
+                                this.admin = true;
                             }
                         })
                         .catch((err) => {
@@ -61,7 +63,8 @@ export default {
                             return false;
                         });
                 } else {
-                    this.userDetected = false;
+                  this.guest = true;
+                    this.logged = false;
                     localStorage.removeItem("jwt");
                     localStorage.removeItem("user");
                 }
@@ -78,24 +81,6 @@ export default {
     },
     updated() {
         this.detectUser();
-    },
-    computed: {
-      guest : {
-        get () {
-          return this.$store.state.guest
-        }
-      },
-      logged: {
-        get () {
-          return this.$store.state.logged;
-        }
-      },
-      admin: {
-        get () {
-          return this.$store.state.admin;
-        }
-      },
-
     }
 };
 </script>

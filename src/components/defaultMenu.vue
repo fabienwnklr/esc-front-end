@@ -49,6 +49,7 @@ export default {
     name: "defaultMenu",
     data: () => ({
         drawer: true,
+        mini: false,
         items: [
             { heading: "Principal" },
             { icon: "mdi-home", text: "Accueil", to: "/" },
@@ -60,16 +61,6 @@ export default {
             { icon: "mdi-account-plus", text: "Inscription", to: "/register" },
             { icon: "mdi-power-standby", text: "Connexion", to: "/login" },
         ],
-    }),
-    computed: {
-      mini: {
-        get () {
-          return this.$store.state.mini;
-        },
-        set (val) {
-          this.$store.commit('SET_MINI', val)
-        }
-      }
-    }
+    })
 };
 </script>
