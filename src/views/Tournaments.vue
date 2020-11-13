@@ -1,36 +1,57 @@
-<template v-on:load="getGames">
-  <v-row  class="mx-auto">
+<template>
+  <v-row class="mx-auto">
     <!-- <h1>Tournois</h1> -->
-    <v-col cols="12" xl="2" lg="3" md="3" sm="4" v-for="(item, i) in tournaments" :key="i">
-      <v-card max-width='344' class='mx-auto'>
-      <v-list-item>
-        <v-list-item-avatar color=''>
-          <v-img
-            class="elevation-6"
-            :src="`https://picsum.photos/id/${i+12}/100/100`"
-          ></v-img>
-        </v-list-item-avatar>
-        <v-list-item-content>
-          <v-list-item-title class='headline'>{{ item.name }}</v-list-item-title>
-          <v-list-item-subtitle>créé par {{ item.author }}</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+    <v-col
+      cols="12"
+      xl="2"
+      lg="4"
+      md="4"
+      sm="4"
+      v-for="(tournament, i) in tournaments"
+      :key="i"
+    >
+      <v-card max-width="344" class="mx-auto">
+        <v-list-item>
+          <v-list-item-avatar color="">
+            <v-img
+              class="elevation-6"
+              :src="`https://picsum.photos/id/${i + 12}/100/100`"
+            ></v-img>
+          </v-list-item-avatar>
+          <v-list-item-content>
+            <v-list-item-title class="headline">{{
+              tournament.name
+            }}</v-list-item-title>
+            <v-list-item-subtitle
+              >créé par {{ tournament.author }} le
+              {{ tournament.createdAt }}</v-list-item-subtitle
+            >
+          </v-list-item-content>
+        </v-list-item>
 
-      <v-img :src="`https://picsum.photos/id/${i+55}/200/200`" height='194'></v-img>
+        <v-img
+          :src="`https://picsum.photos/id/${i + 55}/200/200`"
+          height="194"
+        ></v-img>
 
-      <v-card-text>Détails (plateforme, date, mode de jeu)</v-card-text>
+        <v-card-text>
+          Détails
+          <ul>
+            <li>Début du tournoi : {{ tournament.start_date }} </li>
+          </ul>
+        </v-card-text>
 
-      <v-card-actions>
-        <v-btn text class='primary'>Participer</v-btn>
-        <v-spacer></v-spacer>
-        <v-btn icon>
-          <v-icon>mdi-heart</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon>mdi-share-variant</v-icon>
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+        <v-card-actions>
+          <v-btn text class="primary">Participer</v-btn>
+          <v-spacer></v-spacer>
+          <v-btn icon>
+            <v-icon>mdi-heart</v-icon>
+          </v-btn>
+          <v-btn icon>
+            <v-icon>mdi-share-variant</v-icon>
+          </v-btn>
+        </v-card-actions>
+      </v-card>
     </v-col>
   </v-row>
 </template>
@@ -38,19 +59,24 @@
 <script>
 export default {
   data: () => ({
-    tournaments: []
+    tournaments: [],
   }),
   methods: {
-    getTournaments () {
-      this.$http
-        .get(this.$serverUrl + '/tournaments')
-        .then((result) => {
-          this.tournaments = result.data
-        })
-    }
+    getTournaments() {
+      this.$http.get(this.$serverUrl + "/tournaments").then((result) => {
+        console.log(result);
+        this.tournaments = result.data.map(
+          (item, i) => {
+            item.createdAt = new Date(item.createdAt).toLocaleString().slice(0, -3);;
+            item.start_date = new Date(item.start_date).toLocaleString().slice(0, -3);;
+            }
+        );
+        this.tournaments = result.data;
+      });
+    },
   },
-  beforeMount () {
-    this.getTournaments()
-  }
-}
+  mounted() {
+    this.getTournaments();
+  },
+};
 </script>
