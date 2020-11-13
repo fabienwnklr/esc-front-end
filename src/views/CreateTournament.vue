@@ -71,7 +71,7 @@
                 </v-col>
             </v-row>
             <v-datetime-picker
-                v-model="datetime"
+                v-model="start_date"
                 date-format="MM/dd/yyyy"
                 label="Date du tournoi"
                 locale="fr-FR"
@@ -110,7 +110,7 @@ export default {
         gameProposed: [],
         games: [],
         platforms: [],
-        datetime: new Date(),
+        start_date: new Date(),
         checkbox: [],
     }),
     methods: {
@@ -122,23 +122,24 @@ export default {
                     this.$serverUrl + "/tournaments/create",
                     {
                         name: this.name,
-                        startDate: this.datetime,
+                        start_date: this.start_date,
                         author: author,
                     },
                     {
-                        Headers: {
-                            Authorize: "Bearer " + localStorage.getItem("jwt"),
+                        headers: {
+                            authorization: "Bearer " + localStorage.getItem("jwt"),
                         },
                     }
                 )
                 .then((result) => {
                     this.loading = false;
-                    this.alert = result.response.data.message;
+                    this.alert = result.data.message;
                     this.snackbar = true;
                 })
                 .catch((err) => {
+                    console.error(err)
                     this.loading = false;
-                    this.alert = err.response.data.message;
+                    this.alert = err.data.message;
                     this.snackbar = true;
                 });
         },
