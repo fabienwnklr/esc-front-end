@@ -71,7 +71,7 @@ export default {
         snackbar: false,
         loading: false,
         valid: false,
-        email: "fabien.winkler@outlook.fr",
+        email: "john@doe.fr",
         password: null,
         emailRules: [
             (v) => !!v || "E-mail requis.",

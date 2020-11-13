@@ -6,7 +6,7 @@ import axios from 'axios'
 import 'es6-promise'
 
 // Variable global de vue, $ est la convention Vue pour éviter de se perdre
-Vue.prototype.$serverUrl = `http://localhost:1272/api`
+Vue.prototype.$serverUrl = `http://localhost:55/api`
 Vue.prototype.$http = axios
 Vue.prototype.$webSiteName = 'Esport community'
 
