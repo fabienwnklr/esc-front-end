@@ -68,7 +68,7 @@ export default {
       { icon: 'mdi-twitch', text: 'Live', to: '/live' },
       // { icon: 'mdi-email-send-outline', text: 'Contact', to: '/contact' },
       { heading: 'Compte' },
-      { icon: 'mdi-account', text: 'Admin dashboad', to: '/admin' },
+      { icon: 'mdi-shield-account-outline', text: 'Admin dashboad', to: '/admin' },
       { icon: 'mdi-account', text: 'Mon Profil', to: '/profil' },
     ]
   }),

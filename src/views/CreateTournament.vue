@@ -27,8 +27,9 @@
         label="Choisis ta plateforme..."
         clearable
       ></v-autocomplete>
+      <v-text-field
+       type="number"></v-text-field>
       <v-row>
-      <v-text-field type="number"></v-text-field>
         <v-col
           cols="12"
           v-for="(platform, i) in platforms"
