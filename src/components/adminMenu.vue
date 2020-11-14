@@ -59,7 +59,7 @@ export default {
   name: "defaultMenu",
   data: () => ({
     drawer: true,
-    mini: true,
+    mini: false,
     items: [
       { heading: 'Principal' },
       { icon: 'mdi-home', text: 'Accueil', to: '/' },

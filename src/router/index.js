@@ -22,7 +22,12 @@ const routes = [
   {
     path: '/tournaments',
     name: 'tournaments',
-    component: () => import('../views/Tournaments.vue')
+    component: () => import('../views/TournamentList.vue')
+  },
+  {
+    path: '/tournament/:id',
+    name: 'tournament-details',
+    component: () => import('../views/TournamentDetails.vue')
   },
   {
     path: '/new-tournament',
@@ -70,24 +75,7 @@ const routes = [
     meta: {
       requiresAuth: true,
       is_admin: true
-    },
-    children: [{
-      path: 'add-platform',
-      name: 'addPlatform',
-      component: () => import('../views/admin/pages/NewPlatform.vue'),
-      meta: {
-        requiresAuth: true,
-        is_admin: true
-      }
-    }, {
-      path: 'add-game',
-      name: 'addGame',
-      component: () => import('../views/admin/pages/NewGame.vue'),
-      meta: {
-        requiresAuth: true,
-        is_admin: true
-      }
-    }]
+    }
   },
 
 ]
