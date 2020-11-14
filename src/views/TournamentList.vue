@@ -42,7 +42,7 @@
         </v-card-text>
 
         <v-card-actions>
-          <v-btn text class="primary">Participer</v-btn>
+          <v-btn :to="'tournament/' + tournament.id" text class="primary">Participer</v-btn>
           <v-spacer></v-spacer>
           <v-btn icon>
             <v-icon>mdi-heart</v-icon>
