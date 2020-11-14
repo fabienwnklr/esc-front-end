@@ -2,9 +2,17 @@
   <v-data-table
     :headers="headers"
     :items="games"
-    sort-by="names"
+    item-key="name"
+    sort-by="name"
     class="elevation-1"
+    :search="search"
   >
+    <template v-slot:[`item.createdAt`]="{ item }">
+      <span>{{ new Date(item.createdAt).toLocaleString() }}</span>
+    </template>
+    <template v-slot:[`item.updatedAt`]="{ item }">
+      <span>{{ new Date(item.updatedAt).toLocaleString() }}</span>
+    </template>
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Mes jeux</v-toolbar-title>
@@ -45,8 +53,8 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close"> Cancel </v-btn>
-              <v-btn color="blue darken-1" text @click="save"> Save </v-btn>
+              <v-btn color="blue darken-1" text @click="close"> Annuler </v-btn>
+              <v-btn color="green" text @click="save"> Valider </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -71,8 +79,16 @@
           </v-card>
         </v-dialog>
       </v-toolbar>
+       <v-text-field
+        append-icon="mdi-magnify"
+        v-model="search"
+        label="Rechercher"
+        class="mx-4"
+        single-line
+        hide-details
+      ></v-text-field>
     </template>
-    <template v-slot:item.actions="{ item }">
+    <template v-slot:[`item.actions`]="{ item }">
       <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
       <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
     </template>
@@ -85,6 +101,7 @@
 <script>
 export default {
   data: () => ({
+    search: "",
     dialog: false,
     dialogDelete: false,
     headers: [
@@ -93,9 +110,11 @@ export default {
         align: "start",
         value: "name",
       },
-      { text: "Chemin photo", value: "imgUrl" },
-      { text: "Création", value: "createdAt" },
-      { text: "Dernière modification", value: "updatedAt" },
+      { text: "Chemin photo", value: "imgUrl", dataType: "String" },
+      { text: "Création", value: "createdAt", dataType: "Date" },
+      { text: "Par", value: "author", dataType: "String" },
+      { text: "Dernière modification", value: "updatedAt", dataType: "Date" },
+      { text: "Par", value: "author", dataType: "String" },
       { text: "Actions", value: "actions" },
     ],
     games: [],
@@ -105,14 +124,14 @@ export default {
       name: "",
       pathPicture: "",
       created: new Date(),
-      lastEdit: new Date()
+      lastEdit: new Date(),
     },
     defaultItem: {
       id: "",
       name: "",
       pathPicture: "",
       created: new Date(),
-      lastEdit: new Date()
+      lastEdit: new Date(),
     },
   }),
 
@@ -161,6 +180,7 @@ export default {
         .then((res) => console.log(res))
         .catch((err) => console.error(err));
       this.closeDelete();
+      this.initialize();
     },
 
     close() {
@@ -184,8 +204,13 @@ export default {
 
       if (this.editedIndex > -1) {
         this.$http
-          .put(`${this.$serverUrl}/games/${this.editedItem.id}`, this.editedItem)
-          .then((res) => console.log(res))
+          .put(
+            `${this.$serverUrl}/games/${this.editedItem.id}`,
+            this.editedItem
+          )
+          .then((res) => {
+            this.initialize();
+          })
           .catch((err) => console.error(err));
       } else {
         this.$http
@@ -201,8 +226,12 @@ export default {
               },
             }
           )
-          .then((res) => console.log(res))
-          .catch((err) => console.error(err));
+          .then((res) => {
+            this.initialize();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
       }
       this.close();
     },
