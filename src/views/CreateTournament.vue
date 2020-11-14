@@ -7,44 +7,28 @@
         :counter="54"
         label="Nom du tournoi"
       ></v-text-field>
-      <v-item-group v-model="gameProposed" multiple>
-        <v-row>
-          <v-col
-            v-for="(item, i) in games"
-            :key="i"
-            cols="12"
-            lg="3"
-            md="3"
-            sm="2"
-          >
-            <v-item v-slot:default="{ active, toggle }">
-              <v-img
-                :src="`https://picsum.photos/id/${i * 15}/200/300`"
-                height="150"
-                class="text-right pa-2"
-                @click="toggle"
-              >
-                <v-btn icon dark>
-                  <v-icon>
-                    {{ active ? "mdi-heart" : "mdi-heart-outline" }}
-                  </v-icon>
-                </v-btn>
-              </v-img>
-            </v-item>
-          </v-col>
-        </v-row>
-      </v-item-group>
       <v-autocomplete
         prepend-inner-icon="mdi-magnify"
         v-model="selectGame"
         :items="games"
-        item-text="game_name"
-        item-value="game_name"
+        item-text="name"
+        item-value="name"
         no-data-text="Aucun résultats"
         label="Choisis ton jeu..."
         clearable
       ></v-autocomplete>
+      <v-autocomplete
+        prepend-inner-icon="mdi-magnify"
+        v-model="selectPlatform"
+        :items="platforms"
+        item-text="name"
+        item-value="name"
+        no-data-text="Aucun résultats"
+        label="Choisis ta plateforme..."
+        clearable
+      ></v-autocomplete>
       <v-row>
+      <v-text-field type="number"></v-text-field>
         <v-col
           cols="12"
           v-for="(platform, i) in platforms"
@@ -104,11 +88,12 @@
 <script>
 export default {
   data: () => ({
+    selectGame: null,
+    selectPlatform: null,
     loading: false,
     alert: null,
     snackbar: false,
     name: "",
-    selectGame: null,
     gameProposed: [],
     games: [],
     platforms: [],
@@ -154,7 +139,7 @@ export default {
     },
     getGames() {
       this.$http
-        .get(this.$serverUrl + "/getGames")
+        .get(this.$serverUrl + "/games")
         .then((result) => {
           this.games = result.data;
         })
@@ -165,7 +150,7 @@ export default {
     },
     getPlatforms() {
       this.$http
-        .get(this.$serverUrl + "/getPlatforms")
+        .get(this.$serverUrl + "/platforms")
         .then((result) => {
           this.platforms = result.data;
         })

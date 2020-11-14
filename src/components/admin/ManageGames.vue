@@ -34,6 +34,7 @@
                 <v-row>
                   <v-col cols="12">
                     <v-text-field
+                      autofocus
                       v-model="editedItem.name"
                       label="Nom du jeu"
                     ></v-text-field>
@@ -79,7 +80,7 @@
           </v-card>
         </v-dialog>
       </v-toolbar>
-       <v-text-field
+      <v-text-field
         append-icon="mdi-magnify"
         v-model="search"
         label="Rechercher"
