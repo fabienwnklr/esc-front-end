@@ -1,16 +1,15 @@
 <template>
   <div>
-    <span style="display: none"></span>
     <h1 class="text-center ma-10">Admin dashboad</h1>
 
     <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
-      <v-tab v-for="item in tabs" :key="item">
+      <v-tab v-for="(item, i) in tabs" :key="i">
         {{ item.title }}
       </v-tab>
     </v-tabs>
 
     <v-tabs-items v-model="tab">
-      <v-tab-item v-for="item in tabs" :key="item">
+      <v-tab-item v-for="(item, i) in tabs" :key="i">
         <v-card color="basil" flat>
           <component v-bind:is="item.component"></component>
         </v-card>

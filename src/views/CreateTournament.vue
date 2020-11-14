@@ -137,11 +137,12 @@ export default {
           this.loading = false;
           this.alert = result.data.message;
           this.snackbar = true;
+          this.clear();
         })
         .catch((err) => {
           console.error(err);
           this.loading = false;
-          this.alert = err.data.message;
+          this.alert = err.message;
           this.snackbar = true;
         });
     },
@@ -150,7 +151,6 @@ export default {
       this.datetime = "";
       this.select = null;
       this.checkbox = null;
-      this.snackbar = false;
     },
     getGames() {
       this.$http
