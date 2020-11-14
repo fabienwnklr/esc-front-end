@@ -2,7 +2,7 @@
   <v-data-table
     :headers="headers"
     :items="games"
-    sort-by="calories"
+    sort-by="names"
     class="elevation-1"
   >
     <template v-slot:top>
@@ -32,6 +32,7 @@
                   </v-col>
                   <v-col cols="12">
                     <v-file-input
+                      v-model="editedItem.imgUrl"
                       show-size
                       small-chips
                       truncate-length="15"
@@ -59,7 +60,10 @@
               <v-btn color="blue darken-1" text @click="closeDelete"
                 >Cancel</v-btn
               >
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+              <v-btn
+                color="blue darken-1"
+                text
+                @click="deleteItemConfirm(editedItem)"
                 >OK</v-btn
               >
               <v-spacer></v-spacer>
@@ -89,20 +93,26 @@ export default {
         align: "start",
         value: "name",
       },
-      { text: "Photo", value: "picture" },
-      { text: "Chemin photo", value: "path_picture" },
+      { text: "Chemin photo", value: "imgUrl" },
+      { text: "Création", value: "createdAt" },
+      { text: "Dernière modification", value: "updatedAt" },
+      { text: "Actions", value: "actions" },
     ],
     games: [],
     editedIndex: -1,
     editedItem: {
+      id: "",
       name: "",
-      picture: null,
-      path_picture: "",
+      pathPicture: "",
+      created: new Date(),
+      lastEdit: new Date()
     },
     defaultItem: {
+      id: "",
       name: "",
-      picture: null,
-      path_picture: "",
+      pathPicture: "",
+      created: new Date(),
+      lastEdit: new Date()
     },
   }),
 
@@ -145,8 +155,11 @@ export default {
       this.dialogDelete = true;
     },
 
-    deleteItemConfirm() {
-      this.games.splice(this.editedIndex, 1);
+    deleteItemConfirm(item) {
+      this.$http
+        .delete(`${this.$serverUrl}/games/${item.id}`)
+        .then((res) => console.log(res))
+        .catch((err) => console.error(err));
       this.closeDelete();
     },
 
@@ -167,10 +180,29 @@ export default {
     },
 
     save() {
+      const author = JSON.parse(localStorage.getItem("user")).username;
+
       if (this.editedIndex > -1) {
-        Object.assign(this.games[this.editedIndex], this.editedItem);
+        this.$http
+          .put(`${this.$serverUrl}/games/${this.editedItem.id}`, this.editedItem)
+          .then((res) => console.log(res))
+          .catch((err) => console.error(err));
       } else {
-        this.games.push(this.editedItem);
+        this.$http
+          .post(
+            `${this.$serverUrl}/games/create`,
+            {
+              name: this.editedItem.name,
+              author: author,
+            },
+            {
+              headers: {
+                authorization: "Bearer " + localStorage.getItem("jwt"),
+              },
+            }
+          )
+          .then((res) => console.log(res))
+          .catch((err) => console.error(err));
       }
       this.close();
     },
