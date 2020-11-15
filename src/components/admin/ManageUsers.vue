@@ -4,7 +4,7 @@
       locale="fr-FR"
       :headers="headers"
       :items="users"
-      item-key="username"
+      item-key="id"
       sort-by="username"
       class="elevation-1"
       :search="search"
@@ -13,7 +13,7 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Mes utilisateurs</v-toolbar-title>
+          <v-toolbar-title>Utilisateurs</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
@@ -33,8 +33,8 @@
                     <v-col cols="12">
                       <v-text-field
                         autofocus
-                        v-model="editedItem.name"
-                        label="Nom du jeu"
+                        v-model="editedItem.username"
+                        label="Nom d'utilisateur"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
@@ -170,7 +170,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "Ajoute un jeu" : "Modifie le jeu";
+      return this.editedIndex === -1 ? "Ajoute un utilisateur" : "Modifie l'utilisateur";
     },
   },
 
@@ -230,7 +230,7 @@ export default {
           this.alert = true;
           this.alertMsg = res.data.message;
 
-          this.users.splice(this.editedIndex, 1);
+          this.users.splice(index, 1);
           console.log(res);
           })
         .catch((err) => {

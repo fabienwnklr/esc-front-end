@@ -2,78 +2,77 @@
   <v-container>
     <h2 class="mt-5">Création d'un tournoi</h2>
     <form>
-      <v-text-field
-        v-model="name"
-        :counter="54"
-        label="Nom du tournoi"
-      ></v-text-field>
-      <v-autocomplete
-        prepend-inner-icon="mdi-magnify"
-        v-model="selectGame"
-        :items="games"
-        item-text="name"
-        item-value="name"
-        no-data-text="Aucun résultats"
-        label="Choisis ton jeu..."
-        clearable
-      ></v-autocomplete>
-      <v-autocomplete
-        prepend-inner-icon="mdi-magnify"
-        v-model="selectPlatform"
-        :items="platforms"
-        item-text="name"
-        item-value="name"
-        no-data-text="Aucun résultats"
-        label="Choisis ta plateforme..."
-        clearable
-      ></v-autocomplete>
-      <v-text-field
-       type="number"
-       labeel="Nombre de participant"
-       ></v-text-field>
       <v-row>
-        <v-col
-          cols="12"
-          v-for="(platform, i) in platforms"
-          :key="i"
-          lg="2"
-          md="2"
-          sm="2"
+        <v-col cols="12" sm="12" md="6" lg="4">
+          <v-text-field
+            v-model="name"
+            :counter="54"
+            label="Nom du tournoi"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="12" md="6" lg="4">
+          <v-autocomplete
+            prepend-inner-icon="mdi-magnify"
+            v-model="selectGame"
+            :items="games"
+            item-text="name"
+            item-value="name"
+            no-data-text="Aucun résultats"
+            label="Choisis ton jeu..."
+            clearable
+          ></v-autocomplete>
+        </v-col>
+        <v-col cols="12" sm="12" md="6" lg="4">
+        <v-autocomplete
+          prepend-inner-icon="mdi-magnify"
+          v-model="selectPlatform"
+          :items="platforms"
+          item-text="name"
+          item-value="name"
+          no-data-text="Aucun résultats"
+          label="Choisis ta plateforme..."
+          clearable
+          multiple
+        ></v-autocomplete>
+        </v-col>
+        <v-col cols="12" sm="12" md="6" lg="4">
+        <v-text-field
+          type="number"
+          label="Nombre de participant"
+          prepend-inner-icon="mdi-counter"
+        ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="12" md="6" lg="4">
+        <v-datetime-picker
+          v-model="start_date"
+          date-format="MM/dd/yyyy"
+          label="Date du tournoi"
+          locale="fr-FR"
+          okText="Valider"
+          clearText="Vider"
+          prepend-icon="mdi-calendar"
         >
-          <v-checkbox
-            v-model="checkbox"
-            :label="platform.name"
-            :value="platform.name"
-            :id="platform.name + '_' + platform.id"
+          <template slot="dateIcon">
+            <v-icon>mdi-calendar</v-icon>
+          </template>
+          <template slot="timeIcon">
+            <v-icon>mdi-clock</v-icon>
+          </template>
+        </v-datetime-picker>
+        </v-col>
+        <v-col cols="12">
+          <div class="text-right mb-5 mt-5">
+          <v-btn
+            class="mr-4 green white--text"
+            @click="createTournament"
+            :loading="loading"
           >
-          </v-checkbox>
+            Créer
+          </v-btn>
+          <v-btn @click="clear">Vider</v-btn>
+        </div>
         </v-col>
       </v-row>
-      <v-datetime-picker
-        v-model="start_date"
-        date-format="MM/dd/yyyy"
-        label="Date du tournoi"
-        locale="fr-FR"
-        okText="Valider"
-        clearText="Vider"
-      >
-        <template slot="dateIcon">
-          <v-icon>mdi-calendar</v-icon>
-        </template>
-        <template slot="timeIcon">
-          <v-icon>mdi-clock</v-icon>
-        </template>
-      </v-datetime-picker>
-      <div class="text-right mb-5 mt-5">
-        <v-btn
-          class="mr-4 green white--text"
-          @click="createTournament"
-          :loading="loading"
-        >
-          Créer
-        </v-btn>
-        <v-btn @click="clear">Vider</v-btn>
-      </div>
     </form>
 
     <v-snackbar v-model="snackbar">
@@ -108,13 +107,11 @@ export default {
       const author = JSON.parse(localStorage.getItem("user")).username;
       this.loading = true;
       this.$http
-        .post("/tournaments/create",
-          {
-            name: this.name,
-            start_date: this.start_date,
-            author: author,
-          }
-        )
+        .post("/tournaments/create", {
+          name: this.name,
+          start_date: this.start_date,
+          createdBy: author,
+        })
         .then((result) => {
           this.loading = false;
           this.alert = result.data.message;
@@ -158,7 +155,7 @@ export default {
   mounted() {
     this.getGames();
     this.getPlatforms();
-  }
+  },
 };
 </script>
 

@@ -23,7 +23,7 @@
               tournament.name
             }}</v-list-item-title>
             <v-list-item-subtitle
-              >créé par {{ tournament.author }} le
+              >créé par {{ tournament.createdBy }} le
               {{ tournament.createdAt }}</v-list-item-subtitle
             >
           </v-list-item-content>
