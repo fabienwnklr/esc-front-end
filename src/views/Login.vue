@@ -90,6 +90,7 @@ export default {
             this.loading = false;
         },
         login() {
+            const _this = this;
             if (this.valid) {
                 this.resetProp();
                 this.loading = true;
@@ -105,8 +106,8 @@ export default {
                             JSON.stringify(response.data.user)
                         );
                         localStorage.setItem("jwt", response.data.token);
-
-                        if (localStorage.getItem("jwt") != null) {
+                        _this.$http.defaults.headers.Authorization = `Bearer ${response.data.token}`;
+                        if (response.data.token != null) {
                             if (this.$route.params.nextUrl != null) {
                                 this.$router.push(this.$route.params.nextUrl);
                             } else {

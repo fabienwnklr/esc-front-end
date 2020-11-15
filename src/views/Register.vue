@@ -121,6 +121,7 @@ export default {
             this.loading = false;
         },
         register() {
+            const _this = this;
             if (this.valid) {
                 this.resetProp();
                 this.loading = true;
@@ -137,14 +138,14 @@ export default {
                             JSON.stringify(result.data.user)
                         );
                         localStorage.setItem("jwt", result.data.token);
-
-                        if (localStorage.getItem("jwt") != null) {
+                        if (result.data.token != null) {
                             this.$emit("loggedIn");
                             if (this.$route.params.nextUrl != null) {
                                 this.$router.push(this.$route.params.nextUrl);
                             } else {
                                 this.$router.push("/");
                             }
+                             _this.$http.defaults.headers.Authorization = `Bearer ${result.data.token}`;
                         }
                     })
                     .catch((err) => console.info(err));

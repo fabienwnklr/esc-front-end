@@ -74,10 +74,7 @@ export default {
   }),
   methods: {
     disconnect () {
-      localStorage.removeItem('user')
-      localStorage.removeItem('jwt')
-      this.$router.push('/login')
-      this.$emit('logout')
+      this.$logout();
     }
   }
 };

@@ -58,9 +58,7 @@ export default {
                             }
                         })
                         .catch((err) => {
-                            // console.log(err)
-                            localStorage.removeItem("jwt");
-                            localStorage.removeItem("user");
+                            _this.$logout();
                             return false;
                         });
                     })
@@ -68,24 +66,21 @@ export default {
                         console.error(err);
                         _this.guest = true;
                         _this.logged = false;
-                        localStorage.removeItem("jwt");
-                        localStorage.removeItem("user");
+                       _this.$logout();
                     });
                 } else {
                     this.guest = true;
                     this.logged = false;
-                    localStorage.removeItem("jwt");
-                    localStorage.removeItem("user");
                 }
             } catch (error) {
                 console.error(error);
             }
         },
         logout() {
-            this.$userDetected = false;
-            localStorage.removeItem("jwt");
-            localStorage.removeItem("user");
-            this.$router.push("/login");
+            this.guest = true;
+            this.logged = false;
+            this.admin = false;
+            this.$logout();
         },
     },
     updated() {

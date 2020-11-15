@@ -13,7 +13,7 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Mes plateformes</v-toolbar-title>
+          <v-toolbar-title>Plateformes</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
@@ -161,7 +161,7 @@ export default {
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "Ajoute un jeu" : "Modifie le jeu";
+      return this.editedIndex === -1 ? "Ajoute une plateforme" : "Modifie la plateforme";
     },
   },
 
@@ -221,7 +221,7 @@ export default {
           this.alert = true;
           this.alertMsg = res.data.message;
 
-          this.platforms.splice(this.editedIndex, 1);
+          this.platforms.splice(index, 1);
           console.log(res);
           })
         .catch((err) => {

@@ -13,7 +13,7 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Mes jeux</v-toolbar-title>
+          <v-toolbar-title>Jeux</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
@@ -231,7 +231,7 @@ export default {
           this.alert = true;
           this.alertMsg = res.data.message;
 
-          this.games.splice(this.editedIndex, 1);
+          this.games.splice(index, 1);
           console.log(res);
           })
         .catch((err) => {
