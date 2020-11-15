@@ -15,8 +15,7 @@ export default {
   }),
   methods: {
     getTournaments () {
-      this.$http
-        .get(this.$serverUrl + '/tournaments')
+      this.$http('/tournaments')
         .then((result) => {
           this.games = result.data
         })

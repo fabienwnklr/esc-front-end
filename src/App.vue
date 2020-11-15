@@ -15,7 +15,6 @@ import defaultMenu from "./components/defaultMenu";
 import userMenu from "./components/userMenu";
 import adminMenu from "./components/adminMenu";
 import footerComponent from "./components/Footer";
-import { authHeader } from './helpers';
 
 export default {
     components: {
@@ -40,13 +39,10 @@ export default {
                 const user = localStorage.getItem("user") !== null ? JSON.parse(localStorage.getItem('user')) : null;
                 const _this = this;
                 if (jwt !== null && user !== null) {
-                    this.$http.get(`${this.$serverUrl}/users/${user.id}`)
+                    this.$http(`/users/${user.id}`)
                     .then(res => {
                         console.log(res)
-                        _this.$http
-                        .get(_this.$serverUrl + "/checkToken", {
-                            headers: authHeader(),
-                        })
+                        _this.$http("/checkToken")
                         .then((res) => {
                             // console.table(res)
                             _this.guest = false;

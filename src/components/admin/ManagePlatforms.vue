@@ -180,8 +180,7 @@ export default {
 
   methods: {
     initialize() {
-      this.$http
-        .get(`${this.$serverUrl}/platforms`)
+      this.$http(`/platforms`)
         .then((res) => {
           this.platforms = res.data
           this.alertColor = 'black';
@@ -215,7 +214,7 @@ export default {
       const _this = this;
       const index = this.editedIndex;
       this.$http
-        .delete(`${this.$serverUrl}/platforms/${item.id}`)
+        .delete(`/platforms/${item.id}`)
         .then((res) => {
           this.alertColor = 'green';
           this.closeColor = 'black';
@@ -260,7 +259,7 @@ export default {
         this.editedItem.updatedBy = author;
         this.$http
           .put(
-            `${this.$serverUrl}/platforms/${this.editedItem.id}`,
+            `/platforms/${this.editedItem.id}`,
             this.editedItem
           )
           .then((res) => {
@@ -275,15 +274,10 @@ export default {
       } else {
         this.$http
           .post(
-            `${this.$serverUrl}/platforms/create`,
+            `/platforms/create`,
             {
               name: this.editedItem.name,
               createdBy: author,
-            },
-            {
-              headers: {
-                authorization: "Bearer " + localStorage.getItem("jwt"),
-              },
             }
           )
           .then((res) => {

@@ -63,7 +63,7 @@ export default {
   }),
   methods: {
     getTournaments() {
-      this.$http.get(this.$serverUrl + "/tournaments").then((result) => {
+      this.$http("/tournaments").then((result) => {
         console.log(result);
         this.tournaments = result.data.map(
           (item, i) => {

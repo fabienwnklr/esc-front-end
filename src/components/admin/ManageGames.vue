@@ -190,8 +190,7 @@ export default {
 
   methods: {
     initialize() {
-      this.$http
-        .get(`${this.$serverUrl}/games`)
+      this.$http(`/games`)
         .then((res) => {
           this.games = res.data
           this.alertColor = 'black';
@@ -225,7 +224,7 @@ export default {
       const _this = this;
       const index = this.editedIndex;
       this.$http
-        .delete(`${this.$serverUrl}/games/${item.id}`)
+        .delete(`/games/${item.id}`)
         .then((res) => {
           this.alertColor = 'green';
           this.closeColor = 'black';
@@ -270,7 +269,7 @@ export default {
         this.editedItem.updatedBy = author;
         this.$http
           .put(
-            `${this.$serverUrl}/games/${this.editedItem.id}`,
+            `/games/${this.editedItem.id}`,
             this.editedItem
           )
           .then((res) => {
@@ -285,15 +284,10 @@ export default {
       } else {
         this.$http
           .post(
-            `${this.$serverUrl}/games/create`,
+            `/games/create`,
             {
               name: this.editedItem.name,
               createdBy: author,
-            },
-            {
-              headers: {
-                authorization: "Bearer " + localStorage.getItem("jwt"),
-              },
             }
           )
           .then((res) => {

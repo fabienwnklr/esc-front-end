@@ -108,17 +108,11 @@ export default {
       const author = JSON.parse(localStorage.getItem("user")).username;
       this.loading = true;
       this.$http
-        .post(
-          this.$serverUrl + "/tournaments/create",
+        .post("/tournaments/create",
           {
             name: this.name,
             start_date: this.start_date,
             author: author,
-          },
-          {
-            headers: {
-              authorization: "Bearer " + localStorage.getItem("jwt"),
-            },
           }
         )
         .then((result) => {
@@ -141,8 +135,7 @@ export default {
       this.checkbox = null;
     },
     getGames() {
-      this.$http
-        .get(this.$serverUrl + "/games")
+      this.$http("/games")
         .then((result) => {
           this.games = result.data;
         })
@@ -152,8 +145,7 @@ export default {
         });
     },
     getPlatforms() {
-      this.$http
-        .get(this.$serverUrl + "/platforms")
+      this.$http("/platforms")
         .then((result) => {
           this.platforms = result.data;
         })
