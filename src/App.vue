@@ -38,24 +38,27 @@ export default {
             try {
                 const jwt = localStorage.getItem("jwt");
                 const user = localStorage.getItem("user") !== null ? JSON.parse(localStorage.getItem('user')) : null;
-
+                const _this = this;
                 if (jwt !== null && user !== null) {
-                    this.$http
-                        .get(this.$serverUrl + "/checkToken", {
+                    this.$http.get(`${this.$serverUrl}/users/${user.id}`)
+                    .then(res => {
+                        console.log(res)
+                        _this.$http
+                        .get(_this.$serverUrl + "/checkToken", {
                             headers: authHeader(),
                         })
                         .then((res) => {
                             // console.table(res)
-                            this.guest = false;
-                            this.logged = true;
+                            _this.guest = false;
+                            _this.logged = true;
                             if (
                                 user !== null &&
                                 typeof user.is_admin !== "undefined" &&
                                 user.is_admin === true
                             ) {
-                                this.admin = true;
+                                _this.admin = true;
                             } else {
-                                this.admin = false;
+                                _this.admin = false;
                             }
                         })
                         .catch((err) => {
@@ -64,8 +67,16 @@ export default {
                             localStorage.removeItem("user");
                             return false;
                         });
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        _this.guest = true;
+                        _this.logged = false;
+                        localStorage.removeItem("jwt");
+                        localStorage.removeItem("user");
+                    });
                 } else {
-                  this.guest = true;
+                    this.guest = true;
                     this.logged = false;
                     localStorage.removeItem("jwt");
                     localStorage.removeItem("user");

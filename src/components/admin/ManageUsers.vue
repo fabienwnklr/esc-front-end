@@ -38,13 +38,6 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
-                      <v-file-input
-                        v-model="editedItem.imgUrl"
-                        show-size
-                        small-chips
-                        truncate-length="15"
-                        label="Photo"
-                      ></v-file-input>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -147,6 +140,11 @@ export default {
         text: "Nom d'utilisateur",
         align: "start",
         value: "username",
+      },
+      {
+        text: "Admin",
+        align: "",
+        value: "is_admin",
       },
       { text: "Actions", value: "actions", sortable: false },
     ],
