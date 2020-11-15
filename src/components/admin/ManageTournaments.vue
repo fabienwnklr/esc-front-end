@@ -82,6 +82,9 @@
           hide-details
         ></v-text-field>
       </template>
+            <template v-slot:[`item.start_date`]="{ item }">
+           <span>{{new Date(item.start_date).toLocaleString().slice(0, -3)}}</span>
+      </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
@@ -137,14 +140,19 @@ export default {
     expanded: [],
     headers: [
       {
-        text: "Nom d'utilisateur",
+        text: "Nom du tournoi",
         align: "start",
-        value: "username",
+        value: "name",
       },
       {
-        text: "Admin",
+        text: "Date du tournoi",
         align: "",
-        value: "is_admin",
+        value: "start_date",
+      },
+      {
+        text: "Nombre de participant",
+        align: "",
+        value: "nb_participant",
       },
       { text: "Actions", value: "actions", sortable: false },
     ],
@@ -152,19 +160,23 @@ export default {
     editedIndex: -1,
     editedItem: {
       id: "",
-      username: "",
+      name: '',
+      start_date: '',
+      nb_participant: '',
       createdBy: '',
       createdAt: '',
       updatedBy: '',
-      updatedAt: '',
+      updatedAt: ''
     },
     defaultItem: {
       id: "",
-      username: "",
+      name: '',
+      start_date: '',
+      nb_participant: '',
       createdBy: '',
       createdAt: '',
       updatedBy: '',
-      updatedAt: '',
+      updatedAt: ''
     },
   }),
 

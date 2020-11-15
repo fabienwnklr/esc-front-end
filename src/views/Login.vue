@@ -106,7 +106,7 @@ export default {
                             JSON.stringify(response.data.user)
                         );
                         localStorage.setItem("jwt", response.data.token);
-                        _this.$http.defaults.headers.Authorization = `Bearer ${response.data.token}`;
+                        _this.$http.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
                         if (response.data.token != null) {
                             if (this.$route.params.nextUrl != null) {
                                 this.$router.push(this.$route.params.nextUrl);

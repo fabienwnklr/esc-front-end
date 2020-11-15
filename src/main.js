@@ -8,14 +8,18 @@ import 'es6-promise'
 // Variable global de vue, $ est la convention Vue pour éviter de se perdre
 Vue.prototype.$serverUrl = ``
 Vue.prototype.$http = axios.create({
-  baseURL: 'http://localhost:55/api'
+  baseURL: 'http://localhost:55/api',
+  headers: {
+    common: { Authorization: `Bearer ${localStorage.getItem('jwt')}` }
+  }
+
 })
 Vue.prototype.$logout = function () {
   console.log(this)
   localStorage.removeItem("jwt");
   localStorage.removeItem("user");
   this.$router.push("/login");
-  delete this.$http.defaults.headers.Authorization
+  this.$http.defaults.headers.common.Authorization = '';
 }
 Vue.prototype.$webSiteName = 'Esport community'
 
