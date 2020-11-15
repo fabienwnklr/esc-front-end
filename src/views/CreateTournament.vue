@@ -28,7 +28,9 @@
         clearable
       ></v-autocomplete>
       <v-text-field
-       type="number"></v-text-field>
+       type="number"
+       labeel="Nombre de participant"
+       ></v-text-field>
       <v-row>
         <v-col
           cols="12"
@@ -40,9 +42,9 @@
         >
           <v-checkbox
             v-model="checkbox"
-            :label="platform.platform_name"
-            :value="platform.platform_name"
-            :id="platform.platform_name + '_' + platform.platform_id"
+            :label="platform.name"
+            :value="platform.name"
+            :id="platform.name + '_' + platform.id"
           >
           </v-checkbox>
         </v-col>

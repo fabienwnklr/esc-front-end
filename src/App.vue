@@ -54,6 +54,8 @@ export default {
                                 user.is_admin === true
                             ) {
                                 this.admin = true;
+                            } else {
+                                this.admin = false;
                             }
                         })
                         .catch((err) => {
