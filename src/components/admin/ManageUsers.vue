@@ -189,7 +189,7 @@ export default {
 
   methods: {
     initialize() {
-      this.$http(`/users`)
+      this.$http(`/`)
         .then((res) => {
           this.users = res.data
           this.alertColor = 'black';
@@ -223,7 +223,7 @@ export default {
       const _this = this;
       const index = this.editedIndex;
       this.$http
-        .delete(`/users/${item.id}`)
+        .delete(`/user/${item.id}`)
         .then((res) => {
           this.alertColor = 'green';
           this.closeColor = 'black';
@@ -268,7 +268,7 @@ export default {
         this.editedItem.updatedBy = author;
         this.$http
           .put(
-            `/users/${this.editedItem.id}`,
+            `/user/${this.editedItem.id}`,
             this.editedItem
           )
           .then((res) => {
@@ -283,7 +283,7 @@ export default {
       } else {
         this.$http
           .post(
-            `/users/create`,
+            `/user/create`,
             {
               name: this.editedItem.username,
               createdBy: author,

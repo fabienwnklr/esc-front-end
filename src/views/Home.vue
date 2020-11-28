@@ -1,4 +1,4 @@
-<template v-on:load="getGames">
+<template v-on:load="getAllGames">
   <v-row class="mx-auto">
     <v-col cols="12" md="3" sm="1" v-for="(game, i) in games" :key="i">
       <h4>{{ game.game_name }}</h4>
@@ -14,15 +14,15 @@ export default {
     games: []
   }),
   methods: {
-    getTournaments () {
-      this.$http('/tournaments')
+    getAllGames () {
+      this.$http('/game')
         .then((result) => {
           this.games = result.data
         })
     }
   },
   beforeMount () {
-    this.getTournaments()
+    this.getAllGames()
     // this.getLastTournaments()
   }
 }

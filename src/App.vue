@@ -39,12 +39,11 @@ export default {
                 const user = localStorage.getItem("user") !== null ? JSON.parse(localStorage.getItem('user')) : null;
                 const _this = this;
                 if (jwt !== null && user !== null) {
-                    this.$http(`/users/${user.id}`)
+                    this.$http(`/user/${user.id}`)
                     .then(res => {
                         console.log(res)
                         _this.$http("/checkToken")
-                        .then((res) => {
-                            // console.table(res)
+                        .then(() => {
                             _this.guest = false;
                             _this.logged = true;
                             if (
@@ -58,6 +57,7 @@ export default {
                             }
                         })
                         .catch((err) => {
+                            console.error(err);
                             _this.$logout();
                             return false;
                         });

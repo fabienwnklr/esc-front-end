@@ -180,7 +180,7 @@ export default {
 
   methods: {
     initialize() {
-      this.$http(`/platforms`)
+      this.$http(`/platform`)
         .then((res) => {
           this.platforms = res.data
           this.alertColor = 'black';
@@ -214,7 +214,7 @@ export default {
       const _this = this;
       const index = this.editedIndex;
       this.$http
-        .delete(`/platforms/${item.id}`)
+        .delete(`/platform/${item.id}`)
         .then((res) => {
           this.alertColor = 'green';
           this.closeColor = 'black';
@@ -259,7 +259,7 @@ export default {
         this.editedItem.updatedBy = author;
         this.$http
           .put(
-            `/platforms/${this.editedItem.id}`,
+            `/platform/${this.editedItem.id}`,
             this.editedItem
           )
           .then((res) => {
@@ -274,7 +274,7 @@ export default {
       } else {
         this.$http
           .post(
-            `/platforms/create`,
+            `/platform/create`,
             {
               name: this.editedItem.name,
               createdBy: author,

@@ -66,9 +66,9 @@ export default {
       this.$http("/tournaments").then((result) => {
         console.log(result);
         this.tournaments = result.data.map(
-          (item, i) => {
-            item.createdAt = new Date(item.createdAt).toLocaleString().slice(0, -3);;
-            item.start_date = new Date(item.start_date).toLocaleString().slice(0, -3);;
+          (item) => {
+            item.createdAt = new Date(item.createdAt).toLocaleString().slice(0, -3);
+            item.start_date = new Date(item.start_date).toLocaleString().slice(0, -3);
             }
         );
         this.tournaments = result.data;

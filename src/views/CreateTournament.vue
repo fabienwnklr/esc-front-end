@@ -47,7 +47,7 @@
           v-model="start_date"
           date-format="MM/dd/yyyy"
           label="Date du tournoi"
-          locale="fr-FR"
+          locale="fr"
           okText="Valider"
           clearText="Vider"
           prepend-icon="mdi-calendar"
@@ -132,7 +132,7 @@ export default {
       this.checkbox = null;
     },
     getGames() {
-      this.$http("/games")
+      this.$http("/game")
         .then((result) => {
           this.games = result.data;
         })
@@ -142,7 +142,7 @@ export default {
         });
     },
     getPlatforms() {
-      this.$http("/platforms")
+      this.$http("/platform")
         .then((result) => {
           this.platforms = result.data;
         })
@@ -160,4 +160,14 @@ export default {
 </script>
 
 <style>
+.v-picker {
+    border-radius: 0;
+}
+.v-time-picker-title__time .v-picker__title__btn, .v-time-picker-title__time span {
+  height: auto;
+  font-size: 34px;
+}
+.v-picker__title {
+  height: 88px;
+}
 </style>

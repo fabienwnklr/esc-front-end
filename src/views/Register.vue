@@ -126,7 +126,7 @@ export default {
                 this.resetProp();
                 this.loading = true;
                 this.$http
-                    .post("/users/register", {
+                    .post("/user/register", {
                         username: this.username,
                         email: this.email,
                         password: this.password,
