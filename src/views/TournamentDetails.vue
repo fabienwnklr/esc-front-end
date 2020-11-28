@@ -9,7 +9,7 @@ export default {
   }),
   methods: {
     getDetailsTournament() {
-      this.$http(`/tournaments/${this.$route.params.id}`)
+      this.$http(`/tournament/${this.$route.params.id}`)
         .then((res) => {
           this.tournament = res.data;
           console.log(this.tournament)

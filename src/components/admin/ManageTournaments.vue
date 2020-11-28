@@ -201,7 +201,7 @@ export default {
 
   methods: {
     initialize() {
-      this.$http(`/tournaments`)
+      this.$http(`/tournament`)
         .then((res) => {
           this.tournaments = res.data
           this.alertColor = 'black';
@@ -235,7 +235,7 @@ export default {
       const _this = this;
       const index = this.editedIndex;
       this.$http
-        .delete(`/tournaments/${item.id}`)
+        .delete(`/tournament/${item.id}`)
         .then((res) => {
           this.alertColor = 'green';
           this.closeColor = 'black';
@@ -280,7 +280,7 @@ export default {
         this.editedItem.updatedBy = author;
         this.$http
           .put(
-            `/tournaments/${this.editedItem.id}`,
+            `/tournament/${this.editedItem.id}`,
             this.editedItem
           )
           .then((res) => {
@@ -295,7 +295,7 @@ export default {
       } else {
         this.$http
           .post(
-            `/tournaments/create`,
+            `/tournament/create`,
             {
               name: this.editedItem.username,
               createdBy: author,

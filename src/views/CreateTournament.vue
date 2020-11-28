@@ -107,7 +107,7 @@ export default {
       const author = JSON.parse(localStorage.getItem("user")).username;
       this.loading = true;
       this.$http
-        .post("/tournaments/create", {
+        .post("/tournament/create", {
           name: this.name,
           start_date: this.start_date,
           createdBy: author,
