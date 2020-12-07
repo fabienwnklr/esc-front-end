@@ -13,10 +13,10 @@
         <v-col cols="12" sm="12" md="6" lg="4">
           <v-autocomplete
             prepend-inner-icon="mdi-magnify"
-            v-model="selectGame"
+            v-model="gameSelected"
             :items="games"
             item-text="name"
-            item-value="name"
+            item-value="id"
             no-data-text="Aucun résultats"
             label="Choisis ton jeu..."
             clearable
@@ -90,13 +90,12 @@
 <script>
 export default {
   data: () => ({
-    selectGame: null,
+    gameSelected: null,
     selectPlatform: null,
     loading: false,
     alert: null,
     snackbar: false,
     name: "",
-    gameProposed: [],
     games: [],
     platforms: [],
     start_date: new Date(),
@@ -111,6 +110,7 @@ export default {
           name: this.name,
           start_date: this.start_date,
           createdBy: author,
+          game: this.gameSelected
         })
         .then((result) => {
           this.loading = false;
