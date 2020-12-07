@@ -38,6 +38,7 @@
           Détails
           <ul>
             <li>Début du tournoi : {{ tournament.start_date }} </li>
+            <li>Jeu : {{ tournament.games[0].name }}</li>
           </ul>
         </v-card-text>
 
