@@ -25,10 +25,10 @@
         <v-col cols="12" sm="12" md="6" lg="4">
         <v-autocomplete
           prepend-inner-icon="mdi-magnify"
-          v-model="selectPlatform"
+          v-model="platformsSelected"
           :items="platforms"
           item-text="name"
-          item-value="name"
+          item-value="id"
           no-data-text="Aucun résultats"
           label="Choisis ta plateforme..."
           clearable
@@ -90,8 +90,8 @@
 <script>
 export default {
   data: () => ({
-    gameSelected: null,
-    selectPlatform: null,
+    gameSelected: '',
+    platformsSelected: [],
     loading: false,
     alert: null,
     snackbar: false,
@@ -104,13 +104,16 @@ export default {
   methods: {
     createTournament() {
       const author = JSON.parse(localStorage.getItem("user")).username;
+      const authorId = JSON.parse(localStorage.getItem('user')).id;
       this.loading = true;
       this.$http
         .post("/tournament/create", {
           name: this.name,
           start_date: this.start_date,
           createdBy: author,
-          game: this.gameSelected
+          game: this.gameSelected,
+          platforms: this.platformsSelected,
+          authorId: authorId
         })
         .then((result) => {
           this.loading = false;

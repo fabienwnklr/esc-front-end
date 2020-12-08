@@ -41,7 +41,6 @@ export default {
                 if (jwt !== null && user !== null) {
                     this.$http(`/user/${user.id}`)
                     .then(res => {
-                        console.log(res)
                         _this.$http("/checkToken")
                         .then(() => {
                             _this.guest = false;

@@ -37,13 +37,20 @@
         <v-card-text>
           Détails
           <ul>
-            <li>Début du tournoi : {{ tournament.start_date }} </li>
-            <li>Jeu : {{ tournament.games[0].name }}</li>
+            <li>Date/Heures : {{ tournament.start_date }} </li>
+            <li>{{ tournament.games[0].name }}</li>
+            <li>
+              <v-chip class="mr-2" v-for="(platform, i) in tournament.platforms" :key="i">
+                {{ platform.name }}
+              </v-chip>
+            </li>
           </ul>
         </v-card-text>
 
         <v-card-actions>
-          <v-btn :to="'tournament/' + tournament.id" text class="primary">Participer</v-btn>
+          <v-btn :to="`tournament/${tournament.id}`" text class="primary">
+            Participer
+          </v-btn>
           <v-spacer></v-spacer>
           <v-btn icon>
             <v-icon>mdi-heart</v-icon>
@@ -65,7 +72,6 @@ export default {
   methods: {
     getTournaments() {
       this.$http("/tournament").then((result) => {
-        console.log(result);
         this.tournaments = result.data.map(
           (item) => {
             item.createdAt = new Date(item.createdAt).toLocaleString().slice(0, -3);
