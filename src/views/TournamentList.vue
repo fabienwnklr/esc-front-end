@@ -38,26 +38,75 @@
           Détails
           <ul>
             <li>Date/Heures : {{ tournament.start_date }} </li>
-            <li>{{ tournament.games[0].name }}</li>
+            <li>
+              <v-chip class="my-2">
+                {{ tournament.games[0].name }}
+              </v-chip>
+            </li>
             <li>
               <v-chip class="mr-2" v-for="(platform, i) in tournament.platforms" :key="i">
                 {{ platform.name }}
               </v-chip>
             </li>
+            <li>Participants : 
+              <span class="mx-2" v-for="(user, i) in tournament.users" :key="i">
+                {{ user.username }},
+              </span>
+            </li>
           </ul>
         </v-card-text>
 
         <v-card-actions>
-          <v-btn :to="`tournament/${tournament.id}`" text class="primary">
+
+          <v-btn text title="Join" class="primary">
             Participer
           </v-btn>
+
           <v-spacer></v-spacer>
-          <v-btn icon>
-            <v-icon>mdi-heart</v-icon>
-          </v-btn>
-          <v-btn icon>
-            <v-icon>mdi-share-variant</v-icon>
-          </v-btn>
+
+           <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn 
+                title="Add to favorite"
+                icon
+                v-bind="attrs"
+                v-on="on"
+                >
+                  <v-icon>mdi-heart</v-icon>
+                </v-btn>
+            </template>
+            <span>Add to favorite</span>
+           </v-tooltip>
+
+           <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn 
+                title="More details"
+                icon
+                v-bind="attrs"
+                v-on="on"
+                :to="`tournament/${tournament.id}`"
+                >
+                  <v-icon>mdi-page-next-outline</v-icon>
+                </v-btn>
+            </template>
+            <span>More details</span>
+           </v-tooltip>
+
+           <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+                <v-btn 
+                title="Share"
+                icon
+                v-bind="attrs"
+                v-on="on"
+                >
+                  <v-icon>mdi-share-variant</v-icon>
+                </v-btn>
+            </template>
+            <span>Share</span>
+           </v-tooltip>
+
         </v-card-actions>
       </v-card>
     </v-col>
