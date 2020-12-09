@@ -38,7 +38,21 @@
             multiple
           ></v-autocomplete>
         </v-col>
-        <v-col cols="12" sm="12" md="6" lg="6">
+        <v-col cols="12" sm="12" md="6" lg="4">
+          <v-autocomplete
+            prepend-inner-icon="mdi-magnify"
+            v-model="gameMode"
+            :items="platforms"
+            item-text="name"
+            item-value="id"
+            outlined
+            no-data-text="Aucun résultats"
+            label="Choisis ton mode de jeu..."
+            clearable
+            multiple
+          ></v-autocomplete>
+        </v-col>
+        <v-col cols="12" sm="12" md="6" lg="4">
           <v-text-field
             v-model="nb_participant"
             type="number"
@@ -47,7 +61,7 @@
             outlined
           ></v-text-field>
         </v-col>
-        <v-col cols="12" sm="12" md="6" lg="6">
+        <v-col cols="12" sm="12" md="6" lg="4">
           <v-datetime-picker
             v-model="start_date"
             date-format="MM/dd/yyyy"
@@ -118,12 +132,14 @@ export default {
     start_date: '',
     nb_participant: '',
     details: "",
+    timeoutClear: null,
     textFieldProps: {
-      appendIcon: "mdi-calendar",
+      prependInnerIcon: "mdi-calendar",
       outlined: true
     },
     dateProps: {
-      locale: 'fr'
+      locale: 'fr',
+      firstDayOfWeek: 1
     },
     timeProps: {
       format: '24h'
@@ -149,7 +165,8 @@ export default {
           this.loading = false;
           this.alert = result.data.message;
           this.snackbar = true;
-          this.clear();
+          this.clearForm();
+          this.timeoutClear = setTimeout(this.clearAlert, 4000)
         })
         .catch((err) => {
           console.error(err);
@@ -158,17 +175,20 @@ export default {
           this.snackbar = true;
         });
     },
-    clear() {
+    clearAlert() {
+      this.alert = null;
+      this.loading = false;
+      this.snackbar = false;
+    },
+    clearForm() {
       this.name = "";
       this.gameSelected = "";
       this.platformsSelected = [];
-      this.loading = false;
-      this.alert = null;
-      this.snackbar = false;
       this.name = "";
       this.start_date = '';
       this.nb_participant = '';
       this.details = "";
+      this.timeoutClear = null;
     },
     getGames() {
       this.$http("/game")
