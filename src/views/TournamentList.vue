@@ -1,15 +1,7 @@
 <template>
   <main>
     <v-row v-if="loaded == false" class="mx-auto">
-      <v-col
-        cols="12"
-        xl="2"
-        lg="4"
-        md="4"
-        sm="4"
-        v-for="i in 6"
-        :key="i"
-      >
+      <v-col cols="12" xl="2" lg="4" md="4" sm="4" v-for="i in 6" :key="i">
         <v-skeleton-loader
           max-width="344"
           elevation="2"
@@ -57,12 +49,13 @@
             <ul>
               <li class="my-2">Date/Heures : {{ tournament.start_date }}</li>
               <li class="my-2">
-                <v-chip>
+                <v-chip small>
                   {{ tournament.games[0].name }}
                 </v-chip>
               </li>
               <li>
                 <v-chip
+                  small
                   class="mr-2"
                   v-for="(platform, i) in tournament.platforms"
                   :key="i"
@@ -89,7 +82,7 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
                 <div v-on="on" v-bind="attrs">
-                  <v-btn :disabled="tournament.full" text class="secondary">
+                  <v-btn :disabled="tournament.full" outlined color="primary">
                     Participer
                   </v-btn>
                 </div>
