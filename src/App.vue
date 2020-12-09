@@ -40,7 +40,7 @@ export default {
                 const _this = this;
                 if (jwt !== null && user !== null) {
                     this.$http(`/user/${user.id}`)
-                    .then(res => {
+                    .then(() => {
                         _this.$http("/checkToken")
                         .then(() => {
                             _this.guest = false;

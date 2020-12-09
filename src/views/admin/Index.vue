@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     <h1 class="text-center ma-10">Admin dashboad</h1>
 
     <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
@@ -15,7 +15,7 @@
         </v-card>
       </v-tab-item>
     </v-tabs-items>
-  </div>
+  </main>
 </template>
 
 <script>

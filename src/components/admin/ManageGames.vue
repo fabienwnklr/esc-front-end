@@ -1,6 +1,8 @@
 <template>
   <v-container>
+    <v-skeleton-loader v-if="loaded == false" type="table"></v-skeleton-loader>
     <v-data-table
+      v-else
       locale="fr-FR"
       :headers="headers"
       :items="games"
@@ -131,13 +133,14 @@
 export default {
   data: () => ({
     alert: false,
-    alertMsg : '',
-    alertColor: 'black',
-    closeColor: 'red',
+    alertMsg: "",
+    alertColor: "black",
+    closeColor: "red",
     search: "",
     dialog: false,
     dialogDelete: false,
     expanded: [],
+    loaded: false,
     headers: [
       {
         text: "Nom",
@@ -153,19 +156,19 @@ export default {
       id: "",
       name: "",
       pathPicture: "",
-      createdBy: '',
-      createdAt: '',
-      updatedBy: '',
-      updatedAt: '',
+      createdBy: "",
+      createdAt: "",
+      updatedBy: "",
+      updatedAt: "",
     },
     defaultItem: {
       id: "",
       name: "",
       pathPicture: "",
-      createdBy: '',
-      createdAt: '',
-      updatedBy: '',
-      updatedAt: '',
+      createdBy: "",
+      createdAt: "",
+      updatedBy: "",
+      updatedAt: "",
     },
   }),
 
@@ -181,7 +184,7 @@ export default {
     },
     dialogDelete(val) {
       val || this.closeDelete();
-    }
+    },
   },
 
   created() {
@@ -192,20 +195,21 @@ export default {
     initialize() {
       this.$http(`/game`)
         .then((res) => {
-          this.games = res.data
-          this.alertColor = 'black';
-          this.closeColor = 'red';
+          this.games = res.data;
+          this.loaded = true;
+          this.alertColor = "black";
+          this.closeColor = "red";
           this.alert = true;
-          this.alertMsg = 'Données chargées';
-          })
+          this.alertMsg = "Données chargées";
+        })
         .catch((err) => {
-          this.alertColor = 'red';
-          this.closeColor = 'black';
+          this.alertColor = "red";
+          this.closeColor = "black";
           this.alert = true;
           this.alertMsg = err.message;
 
           console.error(res.data.errorThrow);
-          });
+        });
     },
 
     editItem(item) {
@@ -226,22 +230,22 @@ export default {
       this.$http
         .delete(`/game/${item.id}`)
         .then((res) => {
-          this.alertColor = 'green';
-          this.closeColor = 'black';
+          this.alertColor = "green";
+          this.closeColor = "black";
           this.alert = true;
           this.alertMsg = res.data.message;
 
           this.games.splice(index, 1);
           console.log(res);
-          })
+        })
         .catch((err) => {
-          this.alertColor = 'red';
-          this.closeColor = 'black';
+          this.alertColor = "red";
+          this.closeColor = "black";
           this.alert = true;
           this.alertMsg = err.message;
 
           console.error(err);
-          });
+        });
       this.closeDelete();
     },
 
@@ -268,13 +272,10 @@ export default {
       if (this.editedIndex > -1) {
         this.editedItem.updatedBy = author;
         this.$http
-          .put(
-            `/game/${this.editedItem.id}`,
-            this.editedItem
-          )
+          .put(`/game/${this.editedItem.id}`, this.editedItem)
           .then((res) => {
-            _this.alertColor = 'green';
-            _this.closeColor = 'black';
+            _this.alertColor = "green";
+            _this.closeColor = "black";
             _this.alert = true;
             _this.alertMsg = res.data.message;
             // On fusionne l'objet avec la nouvelle modif pour éviter de tout refresh
@@ -283,25 +284,22 @@ export default {
           .catch((err) => console.error(err));
       } else {
         this.$http
-          .post(
-            `/game/create`,
-            {
-              name: this.editedItem.name,
-              createdBy: author,
-            }
-          )
+          .post(`/game/create`, {
+            name: this.editedItem.name,
+            createdBy: author,
+          })
           .then((res) => {
-            _this.alertColor = 'green';
-            _this.closeColor = 'black';
+            _this.alertColor = "green";
+            _this.closeColor = "black";
             _this.alert = true;
             _this.alertMsg = res.data.message;
-            
+
             _this.games.push(res.data.values);
           })
           .catch((err) => {
             console.error(err);
-            _this.alertColor = 'red';
-            _this.closeColor = 'black';
+            _this.alertColor = "red";
+            _this.closeColor = "black";
             _this.alert = true;
             _this.alertMsg = err.message;
           });
