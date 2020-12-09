@@ -37,6 +37,7 @@
         </v-col>
         <v-col cols="12" sm="12" md="6" lg="4">
         <v-text-field
+          v-model="nb_participant"
           type="number"
           label="Nombre de participant"
           prepend-inner-icon="mdi-counter"
@@ -99,7 +100,7 @@ export default {
     games: [],
     platforms: [],
     start_date: new Date(),
-    checkbox: [],
+    nb_participant: 1,
   }),
   methods: {
     createTournament() {
@@ -113,7 +114,8 @@ export default {
           createdBy: author,
           game: this.gameSelected,
           platforms: this.platformsSelected,
-          authorId: authorId
+          authorId: authorId,
+          nb_participant: this.nb_participant
         })
         .then((result) => {
           this.loading = false;
@@ -132,7 +134,6 @@ export default {
       this.name = "";
       this.datetime = "";
       this.select = null;
-      this.checkbox = null;
     },
     getGames() {
       this.$http("/game")
