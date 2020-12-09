@@ -1,3 +1,4 @@
 # Todo list
 
 * Ajouter 'Détails' pour les tournois pour d'éventuelles infos complémentaires.
+* Finir d'ajouter les skeletons loader partout
