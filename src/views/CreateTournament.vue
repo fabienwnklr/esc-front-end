@@ -93,7 +93,7 @@
         </v-col>
         <v-col cols="12">
           <div class="text-right mb-5 mt-5">
-            <v-btn class="mr-4" @click="clear">Vider</v-btn>
+            <v-btn class="mr-4" @click="clearForm">Vider</v-btn>
             <v-btn
               class=" green white--text"
               @click="createTournament"
