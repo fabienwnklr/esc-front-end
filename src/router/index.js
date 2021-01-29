@@ -1,5 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 Vue.use(VueRouter)
 
@@ -7,32 +9,35 @@ const routes = [
   {
     path: '*',
     name: 'NotFound',
-    component: () => import('../views/error/404.vue')
+    component: () => import('@/views/error/404.vue')
   },
   {
     path: '/',
     name: 'home',
-    component: () => import('../views/Home.vue')
+    component: () => import('@/views/Home.vue'),
+    children: [
+      
+    ]
   },
   {
     path: '/about',
     name: 'about',
-    component: () => import('../views/About.vue')
+    component: () => import('@/views/About.vue')
   },
   {
     path: '/tournaments',
     name: 'tournaments',
-    component: () => import('../views/TournamentList.vue')
+    component: () => import('@/views/TournamentList.vue')
   },
   {
     path: '/tournament/:id',
     name: 'tournament-details',
-    component: () => import('../views/TournamentDetails.vue')
+    component: () => import('@/views/TournamentDetails.vue')
   },
   {
     path: '/new-tournament',
     name: 'new-tournament',
-    component: () => import('../views/CreateTournament.vue'),
+    component: () => import('@/views/CreateTournament.vue'),
     meta: {
       requiresAuth: true
     }
@@ -40,12 +45,12 @@ const routes = [
   {
     path: '/live',
     name: 'live',
-    component: () => import('../views/Live.vue')
+    component: () => import('@/views/Live.vue')
   },
   {
     path: '/profil',
     name: 'profil',
-    component: () => import('../views/Account.vue'),
+    component: () => import('@/views/Account.vue'),
     meta: {
       requiresAuth: true
     }
@@ -53,7 +58,7 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('../views/Login.vue'),
+    component: () => import('@/views/Login.vue'),
     meta: {
       guest: true
     }
@@ -61,7 +66,7 @@ const routes = [
   {
     path: '/register',
     name: 'register',
-    component: () => import('../views/Register.vue'),
+    component: () => import('@/views/Register.vue'),
     meta: {
       guest: true
     }
@@ -69,28 +74,30 @@ const routes = [
   {
     path: '/contact',
     name: 'contact',
-    component: () => import('../views/Contact.vue')
+    component: () => import('@/views/Contact.vue')
   },
   {
     path: '/admin',
     name: 'admin',
-    component: () => import('../views/admin/Index.vue'),
+    component: () => import('@/views/admin/Index.vue'),
     meta: {
       requiresAuth: true,
       is_admin: true
-    }
-  },
-
+    },
+    children: []
+  }
 ]
 
 const router = new VueRouter({
   mode: 'hash',
+  linkActiveClass: 'active',
   routes
 })
 
 
 
 router.beforeEach((to, from, next) => {
+  NProgress.start();
   const userItem = localStorage.getItem('user')
   let user = userItem !== null ? JSON.parse(userItem) : undefined;
   if (to.matched.some(record => record.meta.requiresAuth)) {
@@ -126,6 +133,10 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
+})
+
+router.afterEach(() => {
+  NProgress.done()
 })
 
 export default router

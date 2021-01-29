@@ -121,6 +121,7 @@
 <script>
 export default {
   data: () => ({
+    gameMode: '',
     gameSelected: "",
     platformsSelected: [],
     loading: false,
