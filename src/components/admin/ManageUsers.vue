@@ -189,7 +189,7 @@ export default {
 
   methods: {
     initialize() {
-      this.$http(`/`)
+      this.$http(`/user`)
         .then((res) => {
           this.users = res.data
           this.alertColor = 'black';
@@ -203,7 +203,7 @@ export default {
           this.alert = true;
           this.alertMsg = err.message;
 
-          console.error(res.data.errorThrow);
+          console.error(err);
           });
     },
 
@@ -225,19 +225,19 @@ export default {
       this.$http
         .delete(`/user/${item.id}`)
         .then((res) => {
-          this.alertColor = 'green';
-          this.closeColor = 'black';
-          this.alert = true;
-          this.alertMsg = res.data.message;
+          _this.alertColor = 'green';
+          _this.closeColor = 'black';
+          _this.alert = true;
+          _this.alertMsg = res.data.message;
 
-          this.users.splice(index, 1);
+          _this.users.splice(index, 1);
           console.log(res);
           })
         .catch((err) => {
-          this.alertColor = 'red';
-          this.closeColor = 'black';
-          this.alert = true;
-          this.alertMsg = err.message;
+          _this.alertColor = 'red';
+          _this.closeColor = 'black';
+          _this.alert = true;
+          _this.alertMsg = err.message;
 
           console.error(err);
           });

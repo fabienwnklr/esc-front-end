@@ -210,15 +210,16 @@ export default {
 
           console.error(err);
         });
-        this.$http('/game')
-          .then(res => {
-            this.games = res.data;
-          })
-          .catch(err => console.error(err))
+      this.$http("/game")
+        .then((res) => {
+          this.games = res.data;
+        })
+        .catch((err) => console.error(err));
     },
 
     editItem(item) {
       this.editedIndex = this.gamesMode.indexOf(item);
+      item.games = item.games.map((game) => game.id);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
