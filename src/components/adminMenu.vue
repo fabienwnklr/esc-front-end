@@ -20,7 +20,7 @@
               <v-subheader v-if="item.heading">{{ item.heading }}</v-subheader>
             </v-col>
           </v-row>
-          <v-list-item v-else :key="i" link :to="item.to">
+          <v-list-item :target="item.target" v-else :key="i" link :to="item.to">
             <v-list-item-action>
               <v-tooltip right :disabled="!mini">
                 <template v-slot:activator="{ on }">
@@ -62,14 +62,14 @@ export default {
     mini: false,
     items: [
       { heading: 'Principal' },
-      { icon: 'mdi-home', text: 'Accueil', to: '/' },
-      { icon: 'mdi-new-box', text: 'Créer un tournoi', to: '/new-tournament' },
-      { icon: 'mdi-trophy', text: 'Tournois', to: '/tournaments' },
-      { icon: 'mdi-twitch', text: 'Live', to: '/live' },
-      // { icon: 'mdi-email-send-outline', text: 'Contact', to: '/contact' },
+      { icon: 'mdi-home', text: 'Accueil', target: '', to: '/' },
+      { icon: 'mdi-new-box', text: 'Créer un tournoi', target: '', to: '/new-tournament' },
+      { icon: 'mdi-trophy', text: 'Tournois', target: '', to: '/tournaments' },
+      { icon: 'mdi-twitch', text: 'Live', target: '', to: '/live' },
+      // { icon: 'mdi-email-send-outline', text: 'Contact', target: '', to: '/contact' },
       { heading: 'Compte' },
-      { icon: 'mdi-shield-account-outline', text: 'Admin dashboad', to: '/admin' },
-      { icon: 'mdi-account', text: 'Mon Profil', to: '/profil' },
+      { icon: 'mdi-shield-account-outline', text: 'Admin dashboad', target: '_blank', to: '/admin' },
+      { icon: 'mdi-account', text: 'Mon Profil', target: '', to: '/profil' },
     ]
   }),
   methods: {

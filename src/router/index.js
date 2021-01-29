@@ -78,13 +78,22 @@ const routes = [
   },
   {
     path: '/admin',
-    name: 'admin',
     component: () => import('@/views/admin/Index.vue'),
+    redirect: '/admin/dashboard',
     meta: {
       requiresAuth: true,
       is_admin: true
     },
-    children: []
+    children: [
+      {
+        path: 'dashboard',
+        name: 'dashboard',
+        meta: {
+          title: 'Dashboard'
+        },
+        component: () => import('@/views/admin/users/Index.vue')
+      }
+    ]
   }
 ]
 
