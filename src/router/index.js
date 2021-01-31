@@ -88,6 +88,14 @@ const routes = [
         meta: {
           title: 'Dashboard'
         },
+        component: () => import('@/views/admin/dashboard/Index.vue')
+      },
+      {
+        path: 'users',
+        name: 'users',
+        meta: {
+          title: 'Users'
+        },
         component: () => import('@/views/admin/users/Index.vue')
       }
     ]

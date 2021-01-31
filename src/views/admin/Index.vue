@@ -17,9 +17,9 @@
     </v-tabs-items>
   </main> -->
   <v-app>
-    <v-main>
+    <main>
       <router-view></router-view>
-    </v-main>
+    </main>
   </v-app>
 </template>
 
