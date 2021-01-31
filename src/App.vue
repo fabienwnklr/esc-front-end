@@ -2,7 +2,8 @@
     <v-app>
         <defaultMenu v-if="guest"></defaultMenu>
         <userMenu v-else-if="logged && !admin"></userMenu>
-        <adminMenu v-else-if="logged && admin"></adminMenu>
+        <adminMenu v-else-if="logged && admin && this.$route.path.match(/admin/i) === null"></adminMenu>
+        <adminMenuFull v-else-if="logged && admin && this.$route.path.match(/admin/i) !== null"></adminMenuFull>
         <v-main>
             <router-view></router-view>
             <footerComponent></footerComponent>
@@ -14,6 +15,7 @@
 import defaultMenu from "./components/defaultMenu";
 import userMenu from "./components/userMenu";
 import adminMenu from "./components/adminMenu";
+import adminMenuFull from "./components/adminMenuFull";
 import footerComponent from "./components/Footer";
 
 export default {
@@ -22,6 +24,7 @@ export default {
         defaultMenu,
         userMenu,
         adminMenu,
+        adminMenuFull,
     },
     data: () => ({
       guest: true,
@@ -83,6 +86,7 @@ export default {
         },
     },
     updated() {
+        console.log(this.admin, this.logged, this.$route.path.match(/admin/i))
         this.detectUser();
     }
 };
