@@ -1,89 +1,98 @@
 <template>
   <div>
     <v-app-bar color="primary" dark app>
-    <v-app-bar-nav-icon @click="mini = !mini" />
-    <v-spacer />
-    <v-toolbar-items>
-      <v-btn text href="mailto:wangqiangshen@gmail.com">Hire Me</v-btn>
-      <v-btn text href="https://www.isocked.com" target="_blank">Blog</v-btn>
-      <v-btn icon href="https://github.com/tookit/vue-material-admin">
-        <v-icon>mdi-github</v-icon>
-      </v-btn>
-      <v-menu
-        offset-y
-        origin="center center"
-        class="elelvation-1"
-        transition="scale-transition"
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn icon text slot="activator" v-on="on">
-            <v-badge color="red" overlap>
-              <span slot="badge">3</span>
-              <v-icon medium>mdi-bell</v-icon>
-            </v-badge>
-          </v-btn>
-        </template>
-        <notification-list></notification-list>
-      </v-menu>
-      <v-menu
-        offset-y
-        origin="center center"
-        class="elelvation-1"
-        transition="scale-transition"
-      >
-        <template v-slot:activator="{ on }">
-          <v-btn text slot="activator" v-on="on">
-            <v-icon medium>mdi-translate</v-icon>
-            <span class="ml-2"> {{ localeText }} </span>
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item-group v-model="$vuetify.lang.current">
+      <v-app-bar-nav-icon @click="mini = !mini" />
+      <v-spacer />
+      <v-toolbar-items>
+        <v-btn text href="mailto:wangqiangshen@gmail.com">Hire Me</v-btn>
+        <v-btn text href="https://www.isocked.com" target="_blank">Blog</v-btn>
+        <v-btn icon href="https://github.com/tookit/vue-material-admin">
+          <v-icon>mdi-github</v-icon>
+        </v-btn>
+        <v-menu
+          offset-y
+          origin="center center"
+          class="elelvation-1"
+          transition="scale-transition"
+        >
+          <template v-slot:activator="{ on }">
+            <v-btn icon text slot="activator" v-on="on">
+              <v-badge color="red" overlap>
+                <span slot="badge">3</span>
+                <v-icon medium>mdi-bell</v-icon>
+              </v-badge>
+            </v-btn>
+          </template>
+          <notification-list></notification-list>
+        </v-menu>
+        <v-menu
+          offset-y
+          origin="center center"
+          class="elelvation-1"
+          transition="scale-transition"
+        >
+          <template v-slot:activator="{ on }">
+            <v-btn text slot="activator" v-on="on">
+              <v-icon medium>mdi-translate</v-icon>
+              <span class="ml-2"> {{ localeText }} </span>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item-group v-model="$vuetify.lang.current">
+              <v-list-item
+                @click="handleChangeLocale(item)"
+                v-for="item in availableLanguages"
+                :key="item.value"
+                :value="item.value"
+              >
+                <v-list-item-title v-text="item.text" />
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-menu>
+        <v-menu offset-y origin="center center" transition="scale-transition">
+          <template v-slot:activator="{ on }">
+            <v-btn icon large text slot="activator" v-on="on">
+              <v-avatar size="30px">
+                <img />
+              </v-avatar>
+            </v-btn>
+          </template>
+          <v-list class="pa-0">
             <v-list-item
-              @click="handleChangeLocale(item)"
-              v-for="item in availableLanguages"
-              :key="item.value"
-              :value="item.value"
+              v-for="(item, index) in profileMenus"
+              :to="!item.href ? { name: item.name } : null"
+              :href="item.href"
+              @click="item.click"
+              :disabled="item.disabled"
+              :target="item.target"
+              rel="noopener"
+              :key="index"
             >
-              <v-list-item-title v-text="item.text" />
+              <v-list-item-action v-if="item.icon">
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title>{{ item.title }}</v-list-item-title>
+              </v-list-item-content>
             </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </v-menu>
-      <v-menu offset-y origin="center center" transition="scale-transition">
-        <template v-slot:activator="{ on }">
-          <v-btn icon large text slot="activator" v-on="on">
-            <v-avatar size="30px">
-              <img/>
-            </v-avatar>
-          </v-btn>
-        </template>
-        <v-list class="pa-0">
-          <v-list-item
-            v-for="(item, index) in profileMenus"
-            :to="!item.href ? { name: item.name } : null"
-            :href="item.href"
-            @click="item.click"
-            :disabled="item.disabled"
-            :target="item.target"
-            rel="noopener"
-            :key="index"
-          >
-            <v-list-item-action v-if="item.icon">
-              <v-icon>{{ item.icon }}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content>
-              <v-list-item-title>{{ item.title }}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-toolbar-items>
-    <v-toolbar tag="div" dense slot="extension" color="white" light>
-      <v-icon>mdi-home</v-icon>
-      <v-breadcrumbs :items="breadcrumbs" class="pa-3" />
-    </v-toolbar>
-  </v-app-bar>
+          </v-list>
+        </v-menu>
+      </v-toolbar-items>
+      <v-toolbar tag="div" dense slot="extension" color="white" light>
+        <v-chip
+          v-for="(tab, i) in tabs"
+          :key="i"
+          :to="tab.path"
+          :close="tab.name !== 'dashboard'"
+          @click:close="close(tab)"
+          class="mr-3"
+        >
+          <v-icon v-if="tab.meta.icon" class="mr-2">{{ tab.meta.icon }}</v-icon>
+          {{ tab.name }}
+        </v-chip>
+      </v-toolbar>
+    </v-app-bar>
     <v-navigation-drawer
       v-model="drawer"
       app
@@ -166,6 +175,7 @@
 export default {
   name: "defaultMenuFull",
   data: () => ({
+    tabs: [],
     drawerWidth: 256,
     localeText: navigator.language,
     drawer: true,
@@ -202,27 +212,40 @@ export default {
         title: "Mes graphiques",
         path: "/admin/graphiques"
       },
+      { icon: "mdi-trophy", title: "Tournois", path: "/admin/tournaments" },
+      { icon: "mdi-controller-classic", title: "Jeux", path: "/admin/games" },
+      {
+        icon: "mdi-desktop-classic",
+        title: "Platformes",
+        path: "/admin/platforms"
+      },
       { icon: "mdi-users", title: "Utilisateur", path: "/admin/users" },
       { icon: "mdi-home", title: "Retour au site", path: "/" }
     ]
   }),
-  computed: {
-    breadcrumbs() {
-      const { matched } = this.$route;
-      return matched.map((route, index) => {
-        const to =
-          index === matched.length - 1
-            ? this.$route.path
-            : route.path || route.redirect;
-        const text = route.meta.title;
-        return {
-          text: text,
-          to: to,
-          exact: true,
-          disabled: false
-        };
-      });
+  methods: {
+    close(tab) {
+      const indexTab = this.tabs.findIndex(el => el.path === tab.path);
+      // remove closed tab from array
+      this.tabs.splice(indexTab, 1);
+      // Then, we go in prev elem path
+      if (this.tabs[indexTab - 1]) {
+        this.$router.push(this.tabs[this.tabs.length - 1].path);
+      } else {
+        this.$router.push("/admin/dashboard");
+      }
     }
+  },
+  watch: {
+    $route(to, from) {
+      const elemExist = this.tabs.findIndex(tab => tab.path == to.path);
+      if (elemExist !== -1) return;
+      this.tabs.push(to);
+    }
+  },
+  created() {
+    this.tabs.push(this.$router.currentRoute);
+  
   }
 };
 </script>

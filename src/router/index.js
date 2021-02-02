@@ -86,7 +86,8 @@ const routes = [
         path: 'dashboard',
         name: 'dashboard',
         meta: {
-          title: 'Dashboard'
+          title: 'Dashboard',
+          icon: 'mdi-view-dashboard'
         },
         component: () => import('@/views/admin/dashboard/Index.vue')
       },

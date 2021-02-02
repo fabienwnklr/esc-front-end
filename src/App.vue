@@ -86,7 +86,6 @@ export default {
         },
     },
     updated() {
-        console.log(this.admin, this.logged, this.$route.path.match(/admin/i))
         this.detectUser();
     }
 };
