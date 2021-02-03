@@ -107,22 +107,22 @@
               <template v-slot:prependIcon>
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-bind="attrs" v-on="on" v-text="item.icon" />
+                    <v-icon v-bind="attrs" v-on="on" v-text="item.meta.icon" />
                   </template>
                   <span>
-                    {{ item.title }}
+                    {{ item.meta.title }}
                   </span>
                 </v-tooltip>
               </template>
               <template v-slot:activator>
                 <v-list-item-content>
-                  <v-list-item-title v-text="item.title" />
+                  <v-list-item-title v-text="item.meta.title" />
                 </v-list-item-content>
               </template>
               <v-list-item
                 :class="drawerWidth === 64 ? 'pl-4' : ''"
                 v-for="subItem in item.children"
-                :key="subItem.title"
+                :key="subItem.meta.title"
                 :to="subItem.path"
               >
                 <template v-if="drawerWidth === 64">
@@ -132,16 +132,16 @@
                         <v-icon
                           v-bind="attrs"
                           v-on="on"
-                          v-text="subItem.icon"
+                          v-text="subItem.meta.icon"
                         />
                       </template>
-                      <span>{{ subItem.title }}</span>
+                      <span>{{ subItem.meta.title }}</span>
                     </v-tooltip>
                   </v-list-item-icon>
                 </template>
                 <template v-else>
                   <v-list-item-content>
-                    <v-list-item-title v-text="subItem.title" />
+                    <v-list-item-title v-text="subItem.meta.title" />
                   </v-list-item-content>
                 </template>
               </v-list-item>
@@ -152,13 +152,13 @@
               <v-list-item-icon>
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on, attrs }">
-                    <v-icon v-bind="attrs" v-on="on" v-text="item.icon" />
+                    <v-icon v-bind="attrs" v-on="on" v-text="item.meta.icon" />
                   </template>
-                  <span>{{ item.title }}</span>
+                  <span>{{ item.meta.title }}</span>
                 </v-tooltip>
               </v-list-item-icon>
               <v-list-item-content v-if="drawerWidth !== 64">
-                <v-list-item-title v-text="item.title" />
+                <v-list-item-title v-text="item.meta.title" />
               </v-list-item-content>
               <v-list-item-action v-if="item.new">
                 <v-icon color="green">mdi-new-box </v-icon>
@@ -182,46 +182,7 @@ export default {
     mini: false,
     availableLanguages: [],
     profileMenus: [],
-    items: [
-      {
-        icon: "mdi-view-dashboard",
-        title: "Tableau de bord",
-        path: "/admin/dashboard/"
-      },
-      {
-        icon: "mdi-lock",
-        title: "Permissions",
-        path: "",
-        children: [
-          {
-            title: "Page de permissions",
-            path: "/admin/permissions"
-          },
-          {
-            title: "Directive de permissions",
-            path: "/admin/directive-permission"
-          },
-          {
-            title: "Rôles",
-            path: "/admin/roles"
-          }
-        ]
-      },
-      {
-        icon: "mdi-chart-bar",
-        title: "Mes graphiques",
-        path: "/admin/graphiques"
-      },
-      { icon: "mdi-trophy", title: "Tournois", path: "/admin/tournaments" },
-      { icon: "mdi-controller-classic", title: "Jeux", path: "/admin/games" },
-      {
-        icon: "mdi-desktop-classic",
-        title: "Platformes",
-        path: "/admin/platforms"
-      },
-      { icon: "mdi-users", title: "Utilisateur", path: "/admin/users" },
-      { icon: "mdi-home", title: "Retour au site", path: "/" }
-    ]
+    items: []
   }),
   methods: {
     close(tab) {
@@ -229,10 +190,12 @@ export default {
       // remove closed tab from array
       this.tabs.splice(indexTab, 1);
       // Then, we go in prev elem path
-      if (this.tabs[indexTab - 1]) {
-        this.$router.push(this.tabs[this.tabs.length - 1].path);
-      } else {
-        this.$router.push("/admin/dashboard");
+      if (this.$router.currentRoute.name !== "dashboard" && this.$router.currentRoute.path !== this.tabs[this.tabs.length - 1].path) {
+        if (this.tabs[indexTab - 1]) {
+          this.$router.push(this.tabs[this.tabs.length - 1].path);
+        } else {
+          this.$router.push("/admin/dashboard");
+        }
       }
     }
   },
@@ -244,8 +207,14 @@ export default {
     }
   },
   created() {
+    this.items = this.$router.options.routes.find(route => route.children).children;
     this.tabs.push(this.$router.currentRoute);
-  
-  }
+    if (this.items.findIndex(item => item.name === 'home') === -1) {
+      this.items.push(this.$router.options.routes.find(route => route.name === 'home'));
+    }
+  },
+  mounted() {
+    console.log(this);
+  },
 };
 </script>

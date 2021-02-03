@@ -1,157 +1,182 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
+import Vue from "vue";
+import VueRouter from "vue-router";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
-    path: '*',
-    name: 'NotFound',
-    component: () => import('@/views/error/404.vue')
+    path: "*",
+    name: "NotFound",
+    component: () => import("@/views/error/404.vue")
   },
   {
-    path: '/',
-    name: 'home',
-    component: () => import('@/views/Home.vue')
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: () => import('@/views/About.vue')
-  },
-  {
-    path: '/tournaments',
-    name: 'tournaments',
-    component: () => import('@/views/TournamentList.vue')
-  },
-  {
-    path: '/tournament/:id',
-    name: 'tournament-details',
-    component: () => import('@/views/TournamentDetails.vue')
-  },
-  {
-    path: '/new-tournament',
-    name: 'new-tournament',
-    component: () => import('@/views/CreateTournament.vue'),
+    path: "/",
+    name: "home",
     meta: {
+      title: 'Accueil',
+      icon: 'mdi-home'
+    },
+    component: () => import("@/views/Home.vue")
+  },
+  {
+    path: "/about",
+    name: "about",
+    meta: {
+      title: 'A propos',
+      icon: ''
+    },
+    component: () => import("@/views/About.vue")
+  },
+  {
+    path: "/tournaments",
+    name: "tournaments",
+    meta: {
+      title: 'Tournois',
+      icon: 'mdi-trophy'
+    },
+    component: () => import("@/views/TournamentList.vue")
+  },
+  {
+    path: "/tournament/:id",
+    name: "tournament-details",
+    component: () => import("@/views/TournamentDetails.vue")
+  },
+  {
+    path: "/new-tournament",
+    name: "new-tournament",
+    component: () => import("@/views/CreateTournament.vue"),
+    meta: {
+      title: 'Créer un tournoi',
+      icon: 'mdi-new-box',
       requiresAuth: true
     }
   },
   {
-    path: '/live',
-    name: 'live',
-    component: () => import('@/views/Live.vue')
+    path: "/live",
+    name: "live",
+    meta: {
+      title: 'Live',
+      icon: 'mdi-twitch',
+    },
+    component: () => import("@/views/Live.vue")
   },
   {
-    path: '/profil',
-    name: 'profil',
-    component: () => import('@/views/Account.vue'),
+    path: "/profil",
+    name: "profil",
+    component: () => import("@/views/Account.vue"),
     meta: {
+      title: 'Mon profil',
+      icon: 'mdi-account',
       requiresAuth: true
     }
   },
   {
-    path: '/login',
-    name: 'login',
-    component: () => import('@/views/Login.vue'),
+    path: "/login",
+    name: "login",
+    component: () => import("@/views/Login.vue"),
     meta: {
+      title: 'Se connecter',
+      icon: 'mdi-power-standby',
       guest: true
     }
   },
   {
-    path: '/register',
-    name: 'register',
-    component: () => import('@/views/Register.vue'),
+    path: "/register",
+    name: "register",
+    component: () => import("@/views/Register.vue"),
     meta: {
+      title: 'S\'inscrire',
+      icon: 'mdi-account-plus',
       guest: true
     }
   },
   {
-    path: '/contact',
-    name: 'contact',
-    component: () => import('@/views/Contact.vue')
+    path: "/contact",
+    name: "contact",
+    component: () => import("@/views/Contact.vue")
   },
   {
-    path: '/admin',
-    component: () => import('@/views/admin/Index.vue'),
-    redirect: '/admin/dashboard',
+    path: "/admin",
+    component: () => import("@/views/admin/Index.vue"),
+    redirect: "/admin/dashboard",
     meta: {
+      title: 'Console d\'administrateur',
+      icon: 'mdi-shield-account-outline',
       requiresAuth: true,
       is_admin: true
     },
     children: [
       {
-        path: 'dashboard',
-        name: 'dashboard',
+        path: "/admin/dashboard",
+        name: "dashboard",
         meta: {
-          title: 'Dashboard',
-          icon: 'mdi-view-dashboard'
+          title: "Tableau de bord",
+          icon: "mdi-view-dashboard"
         },
-        component: () => import('@/views/admin/dashboard/Index.vue')
+        component: () => import("@/views/admin/dashboard/Index.vue")
       },
       {
-        path: 'users',
-        name: 'users',
+        path: "users",
+        name: "users",
         meta: {
-          title: 'Users'
+          title: "Utilisateurs",
+          icon: "mdi-account-group"
         },
-        component: () => import('@/views/admin/users/Index.vue')
+        component: () => import("@/views/admin/users/Index.vue"),
       }
     ]
   }
-]
+];
 
 const router = new VueRouter({
-  mode: 'hash',
-  linkActiveClass: 'active',
+  mode: "hash",
+  linkActiveClass: "active",
   routes
-})
-
-
+});
 
 router.beforeEach((to, from, next) => {
   NProgress.start();
-  const userItem = localStorage.getItem('user')
+  const userItem = localStorage.getItem("user");
   let user = userItem !== null ? JSON.parse(userItem) : undefined;
   if (to.matched.some(record => record.meta.requiresAuth)) {
     // ? TODO : Appeler la requête checkToken ici
-    if (localStorage.getItem('jwt') == null) {
+    if (localStorage.getItem("jwt") == null) {
       next({
-        path: '/login',
+        path: "/login",
         params: {
           nextUrl: to.fullPath
         }
-      })
+      });
     } else {
       if (to.matched.some(record => record.meta.is_admin)) {
-        if (user !== 'undefined' && user.is_admin == 1) {
-          next()
+        if (user !== "undefined" && user.is_admin == 1) {
+          next();
         } else {
           next({
-            name: 'home'
-          })
+            name: "home"
+          });
         }
       } else {
-        next()
+        next();
       }
     }
   } else if (to.matched.some(record => record.meta.guest)) {
-    if (localStorage.getItem('jwt') == null) {
-      next()
+    if (localStorage.getItem("jwt") == null) {
+      next();
     } else {
       next({
-        name: 'home'
-      })
+        name: "home"
+      });
     }
   } else {
-    next()
+    next();
   }
-})
+});
 
 router.afterEach(() => {
-  NProgress.done()
-})
+  NProgress.done();
+});
 
-export default router
+export default router;
