@@ -115,7 +115,7 @@ const routes = [
           title: "Tableau de bord",
           icon: "mdi-view-dashboard"
         },
-        component: () => import("@/views/admin/dashboard/Index.vue")
+        component: () => import("@/views/admin/Dashboard.vue")
       },
       {
         path: "users",
@@ -131,7 +131,7 @@ const routes = [
         name: "Game",
         meta: {
           title: "Jeux",
-          icon: "mdi-game"
+          icon: "mdi-gamepad-variant"
         },
         component: () => import("@/components/admin/ManageGames.vue"),
       },
@@ -149,7 +149,7 @@ const routes = [
         name: "Games mode",
         meta: {
           title: "Mode de jeux",
-          icon: ""
+          icon: "mdi-clipboard-list"
         },
         component: () => import("@/components/admin/ManageGamesMode.vue"),
       },
@@ -158,7 +158,7 @@ const routes = [
         name: "Platforms",
         meta: {
           title: "Platformes",
-          icon: ""
+          icon: "mdi-desktop-classic"
         },
         component: () => import("@/components/admin/ManagePlatforms.vue"),
       },

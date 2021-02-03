@@ -1,10 +1,10 @@
 <template>
     <v-app>
+        <v-main>
         <defaultMenu v-if="guest"></defaultMenu>
         <userMenu v-else-if="logged && !admin"></userMenu>
         <adminMenu v-else-if="logged && admin && this.$route.path.match(/admin/i) === null"></adminMenu>
         <adminMenuFull v-else-if="logged && admin && this.$route.path.match(/admin/i) !== null"></adminMenuFull>
-        <v-main>
             <router-view></router-view>
             <footerComponent></footerComponent>
         </v-main>

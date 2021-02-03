@@ -84,6 +84,7 @@
           v-for="(tab, i) in tabs"
           :key="i"
           :to="tab.path"
+          active-class="primary"
           :close="tab.name !== 'dashboard'"
           @click:close="close(tab)"
           class="mr-3"
