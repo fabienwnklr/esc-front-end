@@ -19,47 +19,57 @@
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                Ajouter
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="headline">{{ formTitle }}</span>
-              </v-card-title>
-
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        autofocus
-                        v-model="editedItem.name"
-                        label="Nom du jeu"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-file-input
-                        v-model="editedItem.imgUrl"
-                        show-size
-                        small-chips
-                        truncate-length="15"
-                        label="Photo"
-                      ></v-file-input>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">
-                  Annuler
+            <v-form ref="gameEdit">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="primary"
+                  dark
+                  class="mb-2"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  Ajouter
                 </v-btn>
-                <v-btn color="green" text @click="save"> Valider </v-btn>
-              </v-card-actions>
-            </v-card>
+              </template>
+              <v-card>
+                <v-card-title>
+                  <span class="headline">{{ formTitle }}</span>
+                </v-card-title>
+
+                <v-card-text>
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          autofocus
+                          v-model="editedItem.name"
+                          label="Nom du jeu"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12">
+                        <v-file-input
+                          v-model="editedItem.imgUrl"
+                          show-size
+                          small-chips
+                          truncate-length="15"
+                          label="Photo"
+                        ></v-file-input>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="close">
+                    Annuler
+                  </v-btn>
+                  <v-btn color="green" text @click="save" type="submit">
+                    Valider
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-form>
           </v-dialog>
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
@@ -145,10 +155,10 @@ export default {
       {
         text: "Nom",
         align: "start",
-        value: "name",
+        value: "name"
       },
       { text: "Chemin photo", value: "imgUrl", dataType: "String" },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: "Actions", value: "actions", sortable: false }
     ],
     games: [],
     editedIndex: -1,
@@ -159,7 +169,7 @@ export default {
       createdBy: "",
       createdAt: "",
       updatedBy: "",
-      updatedAt: "",
+      updatedAt: ""
     },
     defaultItem: {
       id: "",
@@ -168,14 +178,14 @@ export default {
       createdBy: "",
       createdAt: "",
       updatedBy: "",
-      updatedAt: "",
-    },
+      updatedAt: ""
+    }
   }),
 
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Ajoute un jeu" : "Modifie le jeu";
-    },
+    }
   },
 
   watch: {
@@ -184,7 +194,7 @@ export default {
     },
     dialogDelete(val) {
       val || this.closeDelete();
-    },
+    }
   },
 
   created() {
@@ -193,22 +203,19 @@ export default {
 
   methods: {
     initialize() {
+      const _this = this;
       this.$http(`/game`)
-        .then((res) => {
-          this.games = res.data;
-          this.loaded = true;
-          this.alertColor = "black";
-          this.closeColor = "red";
-          this.alert = true;
-          this.alertMsg = "Données chargées";
+        .then(res => {
+          _this.games = res.data;
+          _this.loaded = true;
         })
-        .catch((err) => {
-          this.alertColor = "red";
-          this.closeColor = "black";
-          this.alert = true;
-          this.alertMsg = err.message;
+        .catch(err => {
+          _this.alertColor = "red";
+          _this.closeColor = "black";
+          _this.alert = true;
+          _this.alertMsg = err.message;
 
-          console.error(res.data.errorThrow);
+          console.error(err.errorThrow);
         });
     },
 
@@ -229,20 +236,20 @@ export default {
       const index = this.editedIndex;
       this.$http
         .delete(`/game/${item.id}`)
-        .then((res) => {
-          this.alertColor = "green";
-          this.closeColor = "black";
-          this.alert = true;
-          this.alertMsg = res.data.message;
+        .then(res => {
+          _this.alertColor = "green";
+          _this.closeColor = "black";
+          _this.alert = true;
+          _this.alertMsg = res.data.message;
 
-          this.games.splice(index, 1);
+          _this.games.splice(index, 1);
           console.log(res);
         })
-        .catch((err) => {
-          this.alertColor = "red";
-          this.closeColor = "black";
-          this.alert = true;
-          this.alertMsg = err.message;
+        .catch(err => {
+          _this.alertColor = "red";
+          _this.closeColor = "black";
+          _this.alert = true;
+          _this.alertMsg = err.message;
 
           console.error(err);
         });
@@ -273,7 +280,7 @@ export default {
         this.editedItem.updatedBy = author;
         this.$http
           .put(`/game/${this.editedItem.id}`, this.editedItem)
-          .then((res) => {
+          .then(res => {
             _this.alertColor = "green";
             _this.closeColor = "black";
             _this.alert = true;
@@ -281,14 +288,14 @@ export default {
             // On fusionne l'objet avec la nouvelle modif pour éviter de tout refresh
             Object.assign(_this.games[index], res.data.values);
           })
-          .catch((err) => console.error(err));
+          .catch(err => console.error(err));
       } else {
         this.$http
           .post(`/game/create`, {
             name: this.editedItem.name,
-            createdBy: author,
+            createdBy: author
           })
-          .then((res) => {
+          .then(res => {
             _this.alertColor = "green";
             _this.closeColor = "black";
             _this.alert = true;
@@ -296,7 +303,7 @@ export default {
 
             _this.games.push(res.data.values);
           })
-          .catch((err) => {
+          .catch(err => {
             console.error(err);
             _this.alertColor = "red";
             _this.closeColor = "black";
@@ -305,10 +312,9 @@ export default {
           });
       }
       this.close();
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style>
-</style>
+<style></style>

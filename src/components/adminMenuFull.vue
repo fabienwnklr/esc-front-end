@@ -200,7 +200,7 @@ export default {
     }
   },
   watch: {
-    $route(to, from) {
+    $route(to) {
       const elemExist = this.tabs.findIndex(tab => tab.path == to.path);
       if (elemExist !== -1) return;
       this.tabs.push(to);

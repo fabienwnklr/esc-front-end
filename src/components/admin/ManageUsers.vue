@@ -17,40 +17,47 @@
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                Ajouter
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="headline">{{ formTitle }}</span>
-              </v-card-title>
-
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        autofocus
-                        v-model="editedItem.username"
-                        label="Nom d'utilisateur"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">
-                  Annuler
+            <v-form ref="userEdit">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  color="primary"
+                  dark
+                  class="mb-2"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  Ajouter
                 </v-btn>
-                <v-btn color="green" text @click="save"> Valider </v-btn>
-              </v-card-actions>
-            </v-card>
+              </template>
+              <v-card>
+                <v-card-title>
+                  <span class="headline">{{ formTitle }}</span>
+                </v-card-title>
+
+                <v-card-text>
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          autofocus
+                          v-model="editedItem.username"
+                          label="Nom d'utilisateur"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="12"> </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue darken-1" text @click="close">
+                    Annuler
+                  </v-btn>
+                  <v-btn color="green" text @click="save" type="submit"> Valider </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-form>
           </v-dialog>
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
@@ -93,12 +100,13 @@
         <td :colspan="headers.length">
           <ul>
             <li>
-              
               <span v-if="item.createdAt && item.createdBy">
                 Créé par {{ item.createdBy }} le
-              {{ new Date(item.createdAt).toLocaleString() }}
+                {{ new Date(item.createdAt).toLocaleString() }}
               </span>
-              <span v-else> Créé le {{ new Date(item.createdAt).toLocaleString() }}</span>
+              <span v-else>
+                Créé le {{ new Date(item.createdAt).toLocaleString() }}</span
+              >
             </li>
             <li>
               <span v-if="item.updatedAt && item.updatedBy">
@@ -128,9 +136,9 @@
 export default {
   data: () => ({
     alert: false,
-    alertMsg : '',
-    alertColor: 'black',
-    closeColor: 'red',
+    alertMsg: "",
+    alertColor: "black",
+    closeColor: "red",
     search: "",
     dialog: false,
     dialogDelete: false,
@@ -139,39 +147,41 @@ export default {
       {
         text: "Nom d'utilisateur",
         align: "start",
-        value: "username",
+        value: "username"
       },
       {
         text: "Admin",
         align: "",
-        value: "is_admin",
+        value: "is_admin"
       },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: "Actions", value: "actions", sortable: false }
     ],
     users: [],
     editedIndex: -1,
     editedItem: {
       id: "",
       username: "",
-      createdBy: '',
-      createdAt: '',
-      updatedBy: '',
-      updatedAt: '',
+      createdBy: "",
+      createdAt: "",
+      updatedBy: "",
+      updatedAt: ""
     },
     defaultItem: {
       id: "",
       username: "",
-      createdBy: '',
-      createdAt: '',
-      updatedBy: '',
-      updatedAt: '',
-    },
+      createdBy: "",
+      createdAt: "",
+      updatedBy: "",
+      updatedAt: ""
+    }
   }),
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "Ajoute un utilisateur" : "Modifie l'utilisateur";
-    },
+      return this.editedIndex === -1
+        ? "Ajoute un utilisateur"
+        : "Modifie l'utilisateur";
+    }
   },
 
   watch: {
@@ -189,22 +199,19 @@ export default {
 
   methods: {
     initialize() {
+      const _this = this;
       this.$http(`/user`)
-        .then((res) => {
-          this.users = res.data
-          this.alertColor = 'black';
-          this.closeColor = 'red';
-          this.alert = true;
-          this.alertMsg = 'Données chargées';
-          })
-        .catch((err) => {
-          this.alertColor = 'red';
-          this.closeColor = 'black';
-          this.alert = true;
-          this.alertMsg = err.message;
+        .then(res => {
+          _this.users = res.data;
+        })
+        .catch(err => {
+          _this.alertColor = "red";
+          _this.closeColor = "black";
+          _this.alert = true;
+          _this.alertMsg = err.message;
 
           console.error(err);
-          });
+        });
     },
 
     editItem(item) {
@@ -224,23 +231,23 @@ export default {
       const index = this.editedIndex;
       this.$http
         .delete(`/user/${item.id}`)
-        .then((res) => {
-          _this.alertColor = 'green';
-          _this.closeColor = 'black';
+        .then(res => {
+          _this.alertColor = "green";
+          _this.closeColor = "black";
           _this.alert = true;
           _this.alertMsg = res.data.message;
 
           _this.users.splice(index, 1);
           console.log(res);
-          })
-        .catch((err) => {
-          _this.alertColor = 'red';
-          _this.closeColor = 'black';
+        })
+        .catch(err => {
+          _this.alertColor = "red";
+          _this.closeColor = "black";
           _this.alert = true;
           _this.alertMsg = err.message;
 
           console.error(err);
-          });
+        });
       this.closeDelete();
     },
 
@@ -267,49 +274,42 @@ export default {
       if (this.editedIndex > -1) {
         this.editedItem.updatedBy = author;
         this.$http
-          .put(
-            `/user/${this.editedItem.id}`,
-            this.editedItem
-          )
-          .then((res) => {
-            _this.alertColor = 'green';
-            _this.closeColor = 'black';
+          .put(`/user/${this.editedItem.id}`, this.editedItem)
+          .then(res => {
+            _this.alertColor = "green";
+            _this.closeColor = "black";
             _this.alert = true;
             _this.alertMsg = res.data.message;
             // On fusionne l'objet avec la nouvelle modif pour éviter de tout refresh
             Object.assign(_this.users[index], res.data.values);
           })
-          .catch((err) => console.error(err));
+          .catch(err => console.error(err));
       } else {
         this.$http
-          .post(
-            `/user/create`,
-            {
-              name: this.editedItem.username,
-              createdBy: author,
-            }
-          )
-          .then((res) => {
-            _this.alertColor = 'green';
-            _this.closeColor = 'black';
+          .post(`/user/create`, {
+            name: this.editedItem.username,
+            createdBy: author
+          })
+          .then(res => {
+            _this.alertColor = "green";
+            _this.closeColor = "black";
             _this.alert = true;
             _this.alertMsg = res.data.message;
-            
+
             _this.users.push(res.data.values);
           })
-          .catch((err) => {
+          .catch(err => {
             console.error(err);
-            _this.alertColor = 'red';
-            _this.closeColor = 'black';
+            _this.alertColor = "red";
+            _this.closeColor = "black";
             _this.alert = true;
             _this.alertMsg = err.message;
           });
       }
       this.close();
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style>
-</style>
+<style></style>

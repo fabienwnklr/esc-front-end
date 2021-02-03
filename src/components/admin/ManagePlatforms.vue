@@ -180,21 +180,18 @@ export default {
 
   methods: {
     initialize() {
+      const _this = this;
       this.$http(`/platform`)
         .then((res) => {
-          this.platforms = res.data
-          this.alertColor = 'black';
-          this.closeColor = 'red';
-          this.alert = true;
-          this.alertMsg = 'Données chargées';
+          _this.platforms = res.data
           })
         .catch((err) => {
-          this.alertColor = 'red';
-          this.closeColor = 'black';
-          this.alert = true;
-          this.alertMsg = err.message;
+          _this.alertColor = 'red';
+          _this.closeColor = 'black';
+          _this.alert = true;
+          _this.alertMsg = err.message;
 
-          console.error(res.data.errorThrow);
+          console.error(err.errorThrow);
           });
     },
 
@@ -216,19 +213,19 @@ export default {
       this.$http
         .delete(`/platform/${item.id}`)
         .then((res) => {
-          this.alertColor = 'green';
-          this.closeColor = 'black';
-          this.alert = true;
-          this.alertMsg = res.data.message;
+          _this.alertColor = 'green';
+          _this.closeColor = 'black';
+          _this.alert = true;
+          _this.alertMsg = res.data.message;
 
-          this.platforms.splice(index, 1);
+          _this.platforms.splice(index, 1);
           console.log(res);
           })
         .catch((err) => {
-          this.alertColor = 'red';
-          this.closeColor = 'black';
-          this.alert = true;
-          this.alertMsg = err.message;
+          _this.alertColor = 'red';
+          _this.closeColor = 'black';
+          _this.alert = true;
+          _this.alertMsg = err.message;
 
           console.error(err);
           });

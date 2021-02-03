@@ -119,13 +119,49 @@ const routes = [
       },
       {
         path: "users",
-        name: "users",
+        name: "Users",
         meta: {
           title: "Utilisateurs",
           icon: "mdi-account-group"
         },
-        component: () => import("@/views/admin/users/Index.vue"),
-      }
+        component: () => import("@/components/admin/ManageUsers.vue"),
+      },
+      {
+        path: "game",
+        name: "Game",
+        meta: {
+          title: "Jeux",
+          icon: "mdi-game"
+        },
+        component: () => import("@/components/admin/ManageGames.vue"),
+      },
+      {
+        path: "tournaments",
+        name: "Tournaments",
+        meta: {
+          title: "Tournois",
+          icon: "mdi-trophy"
+        },
+        component: () => import("@/components/admin/ManageTournaments.vue"),
+      },
+      {
+        path: "games-mode",
+        name: "Games mode",
+        meta: {
+          title: "Mode de jeux",
+          icon: ""
+        },
+        component: () => import("@/components/admin/ManageGamesMode.vue"),
+      },
+      {
+        path: "platforms",
+        name: "Platforms",
+        meta: {
+          title: "Platformes",
+          icon: ""
+        },
+        component: () => import("@/components/admin/ManagePlatforms.vue"),
+      },
     ]
   }
 ];

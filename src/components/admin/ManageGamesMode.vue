@@ -197,10 +197,6 @@ export default {
         .then((res) => {
           this.gamesMode = res.data;
           this.loaded = true;
-          this.alertColor = "black";
-          this.closeColor = "red";
-          this.alert = true;
-          this.alertMsg = "Données chargées";
         })
         .catch((err) => {
           this.alertColor = "red";
