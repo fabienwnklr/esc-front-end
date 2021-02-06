@@ -18,7 +18,7 @@
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <v-form ref="userEdit">
-              <template v-slot:activator="{ on, attrs }">
+              <!-- <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   color="primary"
                   dark
@@ -28,7 +28,7 @@
                 >
                   Ajouter
                 </v-btn>
-              </template>
+              </template> -->
               <v-card>
                 <v-card-title>
                   <span class="headline">{{ formTitle }}</span>
