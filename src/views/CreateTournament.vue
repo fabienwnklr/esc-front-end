@@ -130,6 +130,7 @@ export default {
     name: "",
     games: [],
     platforms: [],
+    gameModes: [],
     start_date: '',
     nb_participant: '',
     details: "",
@@ -211,6 +212,16 @@ export default {
           this.alert = err.response.data.message;
         });
     },
+    getGameModes() {
+      this.$http("/gamesmode")
+        .then((result) => {
+          this.platforms = result.data;
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.alert = err.response.data.message;
+        });
+    }
   },
   mounted() {
     this.getGames();
