@@ -6,16 +6,15 @@ import axios from 'axios'
 import 'es6-promise'
 
 // Variable global de vue, $ est la convention Vue pour éviter de se perdre
-Vue.prototype.$serverUrl = ``
+const APIurl = window.location.host === 'localhost' ? 'http://localhost:55/api' : 'http://esc-api.fabienwinkler.fr'
 Vue.prototype.$http = axios.create({
-  baseURL: 'http://localhost:55/api',
+  baseURL: 'http://esc-api.fabienwinkler.fr',
   headers: {
     common: { Authorization: `Bearer ${localStorage.getItem('jwt')}` }
   }
 
 })
 Vue.prototype.$logout = function () {
-  console.log(this)
   localStorage.removeItem("jwt");
   localStorage.removeItem("user");
   this.$router.push("/login");
