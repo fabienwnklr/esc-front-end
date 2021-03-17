@@ -173,6 +173,8 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
+
 export default {
   name: "defaultMenuFull",
   data: () => ({
@@ -180,18 +182,22 @@ export default {
     drawerWidth: 256,
     localeText: navigator.language,
     drawer: true,
-    mini: false,
     availableLanguages: [],
     profileMenus: [],
     items: []
   }),
   methods: {
+    ...mapActions("menu/", ["toggleMini"]),
+
     close(tab) {
       const indexTab = this.tabs.findIndex(el => el.path === tab.path);
       // remove closed tab from array
       this.tabs.splice(indexTab, 1);
       // Then, we go in prev elem path
-      if (this.$router.currentRoute.name !== "dashboard" && this.$router.currentRoute.path !== this.tabs[this.tabs.length - 1].path) {
+      if (
+        this.$router.currentRoute.name !== "dashboard" &&
+        this.$router.currentRoute.path !== this.tabs[this.tabs.length - 1].path
+      ) {
         if (this.tabs[indexTab - 1]) {
           this.$router.push(this.tabs[this.tabs.length - 1].path);
         } else {
@@ -208,14 +214,23 @@ export default {
     }
   },
   created() {
-    this.items = this.$router.options.routes.find(route => route.children).children;
+    this.items = this.$router.options.routes.find(
+      route => route.children
+    ).children;
     this.tabs.push(this.$router.currentRoute);
-    if (this.items.findIndex(item => item.name === 'home') === -1) {
-      this.items.push(this.$router.options.routes.find(route => route.name === 'home'));
+    if (this.items.findIndex(item => item.name === "home") === -1) {
+      this.items.push(
+        this.$router.options.routes.find(route => route.name === "home")
+      );
     }
   },
   mounted() {
     console.log(this);
   },
+  computed: {
+    ...mapState({
+      mini: state => state.menu.mini
+    })
+  }
 };
 </script>

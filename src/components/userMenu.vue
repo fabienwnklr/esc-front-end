@@ -55,6 +55,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 export default {
   name: "userMenu",
   data: () => ({
@@ -75,14 +76,12 @@ export default {
     disconnect() {
       this.$logout();
     },
-    toggleMenu() {
-      this.$store.commit("toggleMini");
-      this.mini = this.$store.state.mini;
-      console.log(this.$store.state.mini);
-    }
+    ...mapActions("menu/", ["toggleMini"])
   },
-  created() {
-    this.mini = this.$store.state.mini;
+  computed: {
+    ...mapState({
+      mini: state => state.menu.mini
+    })
   }
 };
 </script>
