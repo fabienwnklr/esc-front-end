@@ -10,7 +10,14 @@
       </v-col>
     </v-row>
     <v-row v-else class="mx-auto">
-      <!-- <h1>Tournois</h1> -->
+      <h1 v-if="tournaments.length === 0 && this.$data.logged">
+        Aucun tournoi disponible pour le moment... Si t'y remédié ?
+        <v-tbn to="/create-tournament">Créer un tournoi</v-tbn>
+      </h1>
+      <h1 v-else-if="tournaments.length === 0 && !this.$data.logged">
+        Aucun tournoi disponible pour le moment... Si t'y remédié ?
+        <v-btn to="login">Connecte toi</v-btn>
+      </h1>
       <v-col
         cols="12"
         xl="2"
@@ -139,12 +146,12 @@ export default {
   data: () => ({
     tournaments: [],
     canJoin: true,
-    loaded: false,
+    loaded: false
   }),
   methods: {
     getTournaments() {
-      this.$http("/tournament").then((result) => {
-        this.tournaments = result.data.map((item) => {
+      this.$http("/tournament").then(result => {
+        this.tournaments = result.data.map(item => {
           item.createdAt = new Date(item.createdAt)
             .toLocaleString()
             .slice(0, -3);
@@ -162,10 +169,10 @@ export default {
         return false;
       }
       return true;
-    },
+    }
   },
   mounted() {
     this.getTournaments();
-  },
+  }
 };
 </script>

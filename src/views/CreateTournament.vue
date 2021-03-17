@@ -41,15 +41,14 @@
         <v-col cols="12" sm="12" md="6" lg="4">
           <v-autocomplete
             prepend-inner-icon="mdi-magnify"
-            v-model="gameMode"
-            :items="platforms"
+            v-model="gameModeSelected"
+            :items="gameModes"
             item-text="name"
             item-value="id"
             outlined
             no-data-text="Aucun résultats"
             label="Choisis ton mode de jeu..."
             clearable
-            multiple
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" sm="12" md="6" lg="4">
@@ -121,7 +120,7 @@
 <script>
 export default {
   data: () => ({
-    gameMode: '',
+    gameModeSelected: '',
     gameSelected: "",
     platformsSelected: [],
     loading: false,
@@ -159,6 +158,7 @@ export default {
           createdBy: author,
           game: this.gameSelected,
           platforms: this.platformsSelected,
+          game_mode: this.gameModeSelected,
           authorId: authorId,
           nb_participant: this.nb_participant,
           details: this.details,
@@ -215,7 +215,7 @@ export default {
     getGameModes() {
       this.$http("/gamesmode")
         .then((result) => {
-          this.platforms = result.data;
+          this.gameModes = result.data;
         })
         .catch((err) => {
           this.loading = false;
@@ -223,9 +223,10 @@ export default {
         });
     }
   },
-  mounted() {
+  created() {
     this.getGames();
     this.getPlatforms();
+    this.getGameModes();
   },
 };
 </script>

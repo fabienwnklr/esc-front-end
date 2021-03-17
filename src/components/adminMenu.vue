@@ -24,7 +24,7 @@
             <v-list-item-action>
               <v-tooltip right :disabled="!mini">
                 <template v-slot:activator="{ on }">
-                    <v-icon v-on="on">{{ item.icon }}</v-icon>
+                  <v-icon v-on="on">{{ item.icon }}</v-icon>
                 </template>
                 <span>{{ item.text }}</span>
               </v-tooltip>
@@ -39,7 +39,7 @@
             <v-list-item-action>
               <v-tooltip right :disabled="!mini">
                 <template v-slot:activator="{ on }">
-                    <v-icon v-on="on">mdi-logout</v-icon>
+                  <v-icon v-on="on">mdi-logout</v-icon>
                 </template>
                 <span>Se déconnecter</span>
               </v-tooltip>
@@ -61,19 +61,23 @@ export default {
     drawer: true,
     mini: false,
     items: [
-      { heading: 'Principal' },
-      { icon: 'mdi-home', text: 'Accueil', to: '/' },
-      { icon: 'mdi-new-box', text: 'Créer un tournoi', to: '/new-tournament' },
-      { icon: 'mdi-trophy', text: 'Tournois', to: '/tournaments' },
-      { icon: 'mdi-twitch', text: 'Live', to: '/live' },
+      { heading: "Principal" },
+      { icon: "mdi-home", text: "Accueil", to: "/" },
+      { icon: "mdi-new-box", text: "Créer un tournoi", to: "/new-tournament" },
+      { icon: "mdi-trophy", text: "Tournois", to: "/tournaments" },
+      { icon: "mdi-twitch", text: "Live", to: "/live" },
       // { icon: 'mdi-email-send-outline', text: 'Contact', to: '/contact' },
-      { heading: 'Compte' },
-      { icon: 'mdi-shield-account-outline', text: 'Admin dashboad', to: '/admin' },
-      { icon: 'mdi-account', text: 'Mon Profil', to: '/profil' },
+      { heading: "Compte" },
+      {
+        icon: "mdi-shield-account-outline",
+        text: "Admin dashboad",
+        to: "/admin"
+      },
+      { icon: "mdi-account", text: "Mon Profil", to: "/profil" }
     ]
   }),
   methods: {
-    disconnect () {
+    disconnect() {
       this.$logout();
     }
   }
