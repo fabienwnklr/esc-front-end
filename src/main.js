@@ -4,6 +4,9 @@ import router from "./router";
 import vuetify from "./plugins/vuetify";
 import axios from "axios";
 import "es6-promise";
+import store from "./store";
+
+window.v = store;
 
 // Variable global de vue, $ est la convention Vue pour éviter de se perdre
 const APIurl =
@@ -29,5 +32,6 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   vuetify,
+  store,
   render: h => h(App)
 }).$mount("#app");

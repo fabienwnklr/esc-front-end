@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-app-bar app clipped-left color="primary">
-      <v-app-bar-nav-icon @click="mini = !mini" />
+      <v-app-bar-nav-icon @click="toggleMini" />
       <span class="title ml-3 mr-5">{{ this.$webSiteName }}</span>
       <v-icon>mdi-xbox-controller</v-icon>
     </v-app-bar>
@@ -22,7 +22,7 @@
           </v-row>
           <v-list-item v-else :key="i" link :to="item.to">
             <v-list-item-action>
-              <v-tooltip right :disabled="!mini">
+              <v-tooltip right :disabled="!$store.mini">
                 <template v-slot:activator="{ on }">
                   <v-icon v-on="on">{{ item.icon }}</v-icon>
                 </template>
@@ -40,12 +40,11 @@
 </template>
 
 <script>
-// import { mapState } from 'vuex'
+import { mapState, mapActions } from "vuex";
 export default {
   name: "defaultMenu",
   data: () => ({
     drawer: true,
-    mini: false,
     items: [
       { heading: "Principal" },
       { icon: "mdi-home", text: "Accueil", to: "/" },
@@ -57,6 +56,14 @@ export default {
       { icon: "mdi-account-plus", text: "Inscription", to: "/register" },
       { icon: "mdi-power-standby", text: "Connexion", to: "/login" }
     ]
-  })
+  }),
+  computed: {
+    ...mapState({
+      mini: state => state.menu.mini
+    })
+  },
+  methods: {
+    ...mapActions("menu/", ["toggleMini"])
+  }
 };
 </script>
