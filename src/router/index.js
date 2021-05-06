@@ -124,7 +124,7 @@ const routes = [
           title: "Utilisateurs",
           icon: "mdi-account-group"
         },
-        component: () => import("@/components/admin/ManageUsers.vue"),
+        component: () => import("@/components/admin/layout/ManageUsers.vue"),
       },
       {
         path: "game",
@@ -133,7 +133,7 @@ const routes = [
           title: "Jeux",
           icon: "mdi-gamepad-variant"
         },
-        component: () => import("@/components/admin/ManageGames.vue"),
+        component: () => import("@/components/admin/layout/ManageGames.vue"),
       },
       {
         path: "tournaments",
@@ -142,7 +142,7 @@ const routes = [
           title: "Tournois",
           icon: "mdi-trophy"
         },
-        component: () => import("@/components/admin/ManageTournaments.vue"),
+        component: () => import("@/components/admin/layout/ManageTournaments.vue"),
       },
       {
         path: "games-mode",
@@ -151,7 +151,7 @@ const routes = [
           title: "Mode de jeux",
           icon: "mdi-clipboard-list"
         },
-        component: () => import("@/components/admin/ManageGamesMode.vue"),
+        component: () => import("@/components/admin/layout/ManageGamesMode.vue"),
       },
       {
         path: "platforms",
@@ -160,7 +160,7 @@ const routes = [
           title: "Platformes",
           icon: "mdi-desktop-classic"
         },
-        component: () => import("@/components/admin/ManagePlatforms.vue"),
+        component: () => import("@/components/admin/layout/ManagePlatforms.vue"),
       },
     ]
   }
