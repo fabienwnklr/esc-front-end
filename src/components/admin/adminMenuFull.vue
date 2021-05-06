@@ -130,11 +130,7 @@
                   <v-list-item-icon>
                     <v-tooltip bottom>
                       <template v-slot:activator="{ on, attrs }">
-                        <v-icon
-                          v-bind="attrs"
-                          v-on="on"
-                          v-text="subItem.meta.icon"
-                        />
+                        <v-icon v-bind="attrs" v-on="on" v-text="subItem.meta.icon" />
                       </template>
                       <span>{{ subItem.meta.title }}</span>
                     </v-tooltip>
@@ -173,7 +169,7 @@
 </template>
 
 <script>
-import NotificationList from "./admin/Notifications.vue"
+import NotificationList from "../Notifications.vue";
 import { mapState, mapActions } from "vuex";
 
 export default {
@@ -184,17 +180,15 @@ export default {
     drawerWidth: 256,
     localeText: navigator.language,
     drawer: true,
-    availableLanguages: [
-      { text: 'English', value: 'en-EN'}
-      ],
+    availableLanguages: [{ text: "English", value: "en-EN" }],
     profileMenus: [],
-    items: []
+    items: [],
   }),
   methods: {
     ...mapActions("menu/", ["toggleMini"]),
 
     close(tab) {
-      const indexTab = this.tabs.findIndex(el => el.path === tab.path);
+      const indexTab = this.tabs.findIndex((el) => el.path === tab.path);
       // remove closed tab from array
       this.tabs.splice(indexTab, 1);
       // Then, we go in prev elem path
@@ -208,24 +202,20 @@ export default {
           this.$router.push("/admin/dashboard");
         }
       }
-    }
+    },
   },
   watch: {
     $route(to) {
-      const elemExist = this.tabs.findIndex(tab => tab.path == to.path);
+      const elemExist = this.tabs.findIndex((tab) => tab.path == to.path);
       if (elemExist !== -1) return;
       this.tabs.push(to);
-    }
+    },
   },
   created() {
-    this.items = this.$router.options.routes.find(
-      route => route.children
-    ).children;
+    this.items = this.$router.options.routes.find((route) => route.children).children;
     this.tabs.push(this.$router.currentRoute);
-    if (this.items.findIndex(item => item.name === "home") === -1) {
-      this.items.push(
-        this.$router.options.routes.find(route => route.name === "home")
-      );
+    if (this.items.findIndex((item) => item.name === "home") === -1) {
+      this.items.push(this.$router.options.routes.find((route) => route.name === "home"));
     }
   },
   mounted() {
@@ -233,8 +223,8 @@ export default {
   },
   computed: {
     ...mapState({
-      mini: state => state.menu.mini
-    })
-  }
+      mini: (state) => state.menu.mini,
+    }),
+  },
 };
 </script>
