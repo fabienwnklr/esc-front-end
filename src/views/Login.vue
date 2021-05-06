@@ -69,13 +69,13 @@ export default {
     email: "john@doe.fr",
     password: null,
     emailRules: [
-      v => !!v || "E-mail requis.",
-      v => /.+@.+\..+/.test(v) || "E-mail invalide"
+      (v) => !!v || "E-mail requis.",
+      (v) => /.+@.+\..+/.test(v) || "E-mail invalide",
     ],
     show: false,
     rules: {
-      required: v => !!v || "Required."
-    }
+      required: (v) => !!v || "Required.",
+    },
   }),
 
   methods: {
@@ -92,9 +92,9 @@ export default {
         this.$http
           .post("/user/login", {
             email: this.email,
-            password: this.password
+            password: this.password,
           })
-          .then(response => {
+          .then((response) => {
             localStorage.setItem("user", JSON.stringify(response.data.user));
             localStorage.setItem("jwt", response.data.token);
             _this.$http.defaults.headers.common[
@@ -107,17 +107,22 @@ export default {
                 this.$router.push("/");
               }
               this.$emit("logged");
+              if (response.data.user.is_admin) {
+                this.$store.commit("SET_ADMIN");
+              } else {
+                this.$store.commit("SET_LOGGIN");
+              }
             }
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
             this.loading = false;
             this.alert = err.response.data.message;
             this.snackbar = true;
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

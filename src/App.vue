@@ -10,6 +10,22 @@
         v-else-if="logged && admin && this.$route.path.match(/admin/i) !== null"
       ></adminMenuFull>
       <router-view></router-view>
+      <!-- global snackbar -->
+      <v-snackbar
+        v-model="snackbar.show"
+        :timeout="3000"
+        app
+        top
+        centered
+        :color="snackbar.color"
+      >
+        {{ snackbar.text }}
+        <template #action="{ attrs }">
+          <v-btn icon v-bind="attrs" @click="$store.commit('HIDE_SNACKBAR')">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </template>
+      </v-snackbar>
       <footerComponent></footerComponent>
     </v-main>
   </v-app>
@@ -21,6 +37,8 @@ import userMenu from "./components/userMenu";
 import footerComponent from "./components/Footer";
 import adminMenu from "./components/admin/adminMenu";
 import adminMenuFull from "./components/admin/adminMenuFull";
+
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -95,6 +113,17 @@ export default {
   },
   updated() {
     this.detectUser();
+  },
+  computed: {
+    ...mapGetters(["getSnackbar"]),
+    snackbar: {
+      get() {
+        return this.getSnackbar;
+      },
+      set(val) {
+        this.$store.commit("SHOW_SNACKBAR", val);
+      },
+    },
   },
 };
 </script>

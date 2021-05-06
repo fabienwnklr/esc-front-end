@@ -1,26 +1,15 @@
-const state = () => ({
+const state = {
   guest: true,
   logged: false,
-  admin: false
-});
-
-const mutations = {
-  setGuest(state) {
-    state.guest = true;
-    state.logged = false;
-    state.admin = false;
-  },
-  setLogged(state) {
-    state.logged = true;
-    state.guest = false;
-    state.admin = false;
-  },
-  setAdmin(state) {
-    state.admin = true;
-    state.logged = true;
-    state.guest = false;
-  }
+  admin: false,
 };
+
+const getters = {
+  getGuest: (state) => state.guest,
+  getLogged: (state) => state.logged,
+  getAdmin: (state) => state.admin
+}
+
 
 const actions = {
   setGuest({ commit }) {
@@ -34,19 +23,31 @@ const actions = {
   },
   logout({ commit }) {
     commit("setLogged");
-  }
+  },
 };
 
-const getters = {
-  guest: state => state.guest,
-  logged: state => state.logged,
-  admin: state => state.admin
+const mutations = {
+  SET_GUEST(state) {
+    state.guest = true;
+    state.logged = false;
+    state.admin = false;
+  },
+  SET_LOGGED(state) {
+    state.logged = true;
+    state.guest = false;
+    state.admin = false;
+  },
+  SET_ADMIN(state) {
+    state.admin = true;
+    state.logged = true;
+    state.guest = false;
+  },
 };
 
 export default {
-  namespaced: true,
+  namespace: true,
   state,
   mutations,
   actions,
-  getters
+  getters,
 };

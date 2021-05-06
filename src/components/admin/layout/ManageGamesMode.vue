@@ -5,7 +5,7 @@
       v-else
       locale="fr-FR"
       :headers="headers"
-      :items="gameMode"
+      :items.*="gameMode"
       item-key="name"
       sort-by="name"
       class="elevation-1"

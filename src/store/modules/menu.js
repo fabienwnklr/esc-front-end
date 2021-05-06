@@ -1,16 +1,16 @@
-const state = () => ({
+const state = {
   mini: false
-});
+};
 
 const mutations = {
-  toggleMini(state) {
+  TOGGLE_MINI(state) {
     state.mini = !state.mini;
   }
 };
 
 const actions = {
   toggleMini({ commit }) {
-    commit("toggleMini");
+    commit("TOGGLE_MINI");
   }
 };
 
@@ -19,7 +19,7 @@ const getters = {
 };
 
 export default {
-  namespaced: true,
+  namespace: true,
   state,
   mutations,
   actions,
