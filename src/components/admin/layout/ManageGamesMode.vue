@@ -5,7 +5,7 @@
       v-else
       locale="fr-FR"
       :headers="headers"
-      :items.*="gameMode"
+      :items="gameMode"
       item-key="name"
       sort-by="name"
       class="elevation-1"
@@ -90,6 +90,14 @@
           hide-details
         ></v-text-field>
       </template>
+
+      <template v-slot:item.games="{ item }">
+        <span v-if="item.games.length === 1"
+          >{{ item.games.map((g) => g.name).toString() }}
+        </span>
+        <span v-else>{{ item.games.map((g) => g.name).join(", ") }} </span>
+      </template>
+
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>

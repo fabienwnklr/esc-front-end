@@ -37,17 +37,14 @@
                         label="Nom du jeu"
                       ></v-text-field>
                     </v-col>
-                    <v-col cols="12">
-                    </v-col>
+                    <v-col cols="12"> </v-col>
                   </v-row>
                 </v-container>
               </v-card-text>
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close">
-                  Annuler
-                </v-btn>
+                <v-btn color="blue darken-1" text @click="close"> Annuler </v-btn>
                 <v-btn color="green" text @click="save"> Valider </v-btn>
               </v-card-actions>
             </v-card>
@@ -59,13 +56,8 @@
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete"
-                  >Cancel</v-btn
-                >
-                <v-btn
-                  color="blue darken-1"
-                  text
-                  @click="deleteItemConfirm(editedItem)"
+                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+                <v-btn color="blue darken-1" text @click="deleteItemConfirm(editedItem)"
                   >OK</v-btn
                 >
                 <v-spacer></v-spacer>
@@ -82,8 +74,8 @@
           hide-details
         ></v-text-field>
       </template>
-            <template v-slot:[`item.start_date`]="{ item }">
-           <span>{{new Date(item.start_date).toLocaleString().slice(0, -3)}}</span>
+      <template v-slot:[`item.start_date`]="{ item }">
+        <span>{{ new Date(item.start_date).toLocaleString().slice(0, -3) }}</span>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
@@ -96,10 +88,9 @@
         <td :colspan="headers.length">
           <ul>
             <li>
-              
               <span v-if="item.createdAt && item.createdBy">
                 Créé par {{ item.createdBy }} le
-              {{ new Date(item.createdAt).toLocaleString() }}
+                {{ new Date(item.createdAt).toLocaleString() }}
               </span>
               <span v-else> Créé le {{ new Date(item.createdAt).toLocaleString() }}</span>
             </li>
@@ -131,9 +122,9 @@
 export default {
   data: () => ({
     alert: false,
-    alertMsg : '',
-    alertColor: 'black',
-    closeColor: 'red',
+    alertMsg: "",
+    alertColor: "black",
+    closeColor: "red",
     search: "",
     dialog: false,
     dialogDelete: false,
@@ -160,23 +151,23 @@ export default {
     editedIndex: -1,
     editedItem: {
       id: "",
-      name: '',
-      start_date: '',
-      nb_participant: '',
-      createdBy: '',
-      createdAt: '',
-      updatedBy: '',
-      updatedAt: ''
+      name: "",
+      start_date: "",
+      nb_participant: "",
+      createdBy: "",
+      createdAt: "",
+      updatedBy: "",
+      updatedAt: "",
     },
     defaultItem: {
       id: "",
-      name: '',
-      start_date: '',
-      nb_participant: '',
-      createdBy: '',
-      createdAt: '',
-      updatedBy: '',
-      updatedAt: ''
+      name: "",
+      start_date: "",
+      nb_participant: "",
+      createdBy: "",
+      createdAt: "",
+      updatedBy: "",
+      updatedAt: "",
     },
   }),
 
@@ -192,7 +183,7 @@ export default {
     },
     dialogDelete(val) {
       val || this.closeDelete();
-    }
+    },
   },
 
   created() {
@@ -205,15 +196,15 @@ export default {
       this.$http(`/tournament`)
         .then((res) => {
           _this.tournaments = res.data;
-          })
+        })
         .catch((err) => {
-          _this.alertColor = 'red';
-          _this.closeColor = 'black';
+          _this.alertColor = "red";
+          _this.closeColor = "black";
           _this.alert = true;
           _this.alertMsg = err.message;
 
           console.error(err.errorThrow);
-          });
+        });
     },
 
     editItem(item) {
@@ -234,22 +225,22 @@ export default {
       this.$http
         .delete(`/tournament/${item.id}`)
         .then((res) => {
-          _this.alertColor = 'green';
-          _this.closeColor = 'black';
+          _this.alertColor = "green";
+          _this.closeColor = "black";
           _this.alert = true;
           _this.alertMsg = res.data.message;
 
           _this.tournaments.splice(index, 1);
           console.log(res);
-          })
+        })
         .catch((err) => {
-          _this.alertColor = 'red';
-          _this.closeColor = 'black';
+          _this.alertColor = "red";
+          _this.closeColor = "black";
           _this.alert = true;
           _this.alertMsg = err.message;
 
           console.error(err);
-          });
+        });
       this.closeDelete();
     },
 
@@ -276,13 +267,10 @@ export default {
       if (this.editedIndex > -1) {
         this.editedItem.updatedBy = author;
         this.$http
-          .put(
-            `/tournament/${this.editedItem.id}`,
-            this.editedItem
-          )
+          .put(`/tournament/${this.editedItem.id}`, this.editedItem)
           .then((res) => {
-            _this.alertColor = 'green';
-            _this.closeColor = 'black';
+            _this.alertColor = "green";
+            _this.closeColor = "black";
             _this.alert = true;
             _this.alertMsg = res.data.message;
             // On fusionne l'objet avec la nouvelle modif pour éviter de tout refresh
@@ -291,25 +279,22 @@ export default {
           .catch((err) => console.error(err));
       } else {
         this.$http
-          .post(
-            `/tournament/create`,
-            {
-              name: this.editedItem.username,
-              createdBy: author,
-            }
-          )
+          .post(`/tournament/create`, {
+            name: this.editedItem.username,
+            createdBy: author,
+          })
           .then((res) => {
-            _this.alertColor = 'green';
-            _this.closeColor = 'black';
+            _this.alertColor = "green";
+            _this.closeColor = "black";
             _this.alert = true;
             _this.alertMsg = res.data.message;
-            
+
             _this.tournaments.push(res.data.values);
           })
           .catch((err) => {
             console.error(err);
-            _this.alertColor = 'red';
-            _this.closeColor = 'black';
+            _this.alertColor = "red";
+            _this.closeColor = "black";
             _this.alert = true;
             _this.alertMsg = err.message;
           });
@@ -320,5 +305,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
