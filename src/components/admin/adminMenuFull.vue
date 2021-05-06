@@ -169,7 +169,7 @@
 </template>
 
 <script>
-import NotificationList from "../Notifications.vue";
+import NotificationList from "../list/Notifications.vue";
 import { mapState, mapActions } from "vuex";
 
 export default {

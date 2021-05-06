@@ -18,9 +18,9 @@
 <script>
 import defaultMenu from "./components/defaultMenu";
 import userMenu from "./components/userMenu";
+import footerComponent from "./components/Footer";
 import adminMenu from "./components/admin/adminMenu";
 import adminMenuFull from "./components/admin/adminMenuFull";
-import footerComponent from "./components/Footer";
 
 export default {
   components: {
