@@ -19,7 +19,7 @@ Vue.prototype.$http = axios.create({
     common: { Authorization: `Bearer ${localStorage.getItem("jwt")}` }
   }
 });
-Vue.prototype.$logout = function() {
+Vue.prototype.$logout = function () {
   localStorage.removeItem("jwt");
   localStorage.removeItem("user");
   this.$router.push("/login");
