@@ -5,7 +5,7 @@
       v-else
       locale="fr-FR"
       :headers="headers"
-      :items="gamesMode"
+      :items="gameMode"
       item-key="name"
       sort-by="name"
       class="elevation-1"
@@ -139,8 +139,8 @@ export default {
     dialog: false,
     dialogDelete: false,
     expanded: [],
-    loaded: false,
     games: [],
+    loaded: false,
     headers: [
       {
         text: "Nom",
@@ -150,7 +150,7 @@ export default {
       { text: "Jeu(x) associé(s)", value: "games", dataType: "String" },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    gamesMode: [],
+    gameMode: [],
     editedIndex: -1,
     editedItem: {
       id: "",
@@ -193,9 +193,9 @@ export default {
 
   methods: {
     initialize() {
-      this.$http(`/gamesMode`)
+      this.$http(`/gameMode`)
         .then((res) => {
-          this.gamesMode = res.data;
+          this.gameMode = res.data;
           this.loaded = true;
         })
         .catch((err) => {
@@ -206,22 +206,29 @@ export default {
 
           console.error(err);
         });
-      this.$http("/game")
-        .then((res) => {
-          this.games = res.data;
-        })
-        .catch((err) => console.error(err));
     },
 
     editItem(item) {
-      this.editedIndex = this.gamesMode.indexOf(item);
-      item.games = item.games.map((game) => game.id);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
+      if (this.games.length === 0) {
+        this.$http("/game")
+          .then((res) => {
+            this.games = res.data;
+            this.editedIndex = this.gameMode.indexOf(item);
+            item.games = item.games.map((game) => game.id);
+            this.editedItem = Object.assign({}, item);
+            this.dialog = true;
+          })
+          .catch((err) => console.error(err));
+      } else {
+        this.editedIndex = this.gameMode.indexOf(item);
+        item.games = item.games.map((game) => game.id);
+        this.editedItem = Object.assign({}, item);
+        this.dialog = true;
+      }
     },
 
     deleteItem(item) {
-      this.editedIndex = this.gamesMode.indexOf(item);
+      this.editedIndex = this.gameMode.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
@@ -230,14 +237,14 @@ export default {
       const _this = this;
       const index = this.editedIndex;
       this.$http
-        .delete(`/gamesMode/${item.id}`)
+        .delete(`/gameMode/${item.id}`)
         .then((res) => {
           _this.alertColor = "green";
           _this.closeColor = "black";
           _this.alert = true;
           _this.alertMsg = res.data.message;
 
-          _this.gamesMode.splice(index, 1);
+          _this.gameMode.splice(index, 1);
           console.log(res);
         })
         .catch((err) => {
@@ -274,27 +281,27 @@ export default {
       if (this.editedIndex > -1) {
         this.editedItem.updatedBy = author;
         this.$http
-          .put(`/gamesMode/${this.editedItem.id}`, this.editedItem)
+          .put(`/gameMode/${this.editedItem.id}`, this.editedItem)
           .then((res) => {
             _this.alertColor = "green";
             _this.closeColor = "black";
             _this.alert = true;
             _this.alertMsg = res.data.message;
             // On fusionne l'objet avec la nouvelle modif pour éviter de tout refresh
-            Object.assign(_this.gamesMode[index], res.data.values);
+            Object.assign(_this.gameMode[index], res.data.values);
           })
           .catch((err) => console.error(err));
       } else {
         this.editedItem.createdBy = author;
         this.$http
-          .post(`/gamesMode/create`, this.editedItem)
+          .post(`/gameMode/create`, this.editedItem)
           .then((res) => {
             _this.alertColor = "green";
             _this.closeColor = "black";
             _this.alert = true;
             _this.alertMsg = res.data.message;
 
-            _this.gamesMode.push(res.data.values);
+            _this.gameMode.push(res.data.values);
           })
           .catch((err) => {
             console.error(err);
