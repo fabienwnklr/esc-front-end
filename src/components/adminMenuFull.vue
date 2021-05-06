@@ -173,16 +173,20 @@
 </template>
 
 <script>
+import NotificationList from "./admin/Notifications.vue"
 import { mapState, mapActions } from "vuex";
 
 export default {
+  components: { NotificationList },
   name: "defaultMenuFull",
   data: () => ({
     tabs: [],
     drawerWidth: 256,
     localeText: navigator.language,
     drawer: true,
-    availableLanguages: [],
+    availableLanguages: [
+      { text: 'English', value: 'en-EN'}
+      ],
     profileMenus: [],
     items: []
   }),
