@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-app-bar color="primary" dark app>
-      <v-app-bar-nav-icon @click="mini = !mini" />
+      <v-app-bar-nav-icon @click="toggleMini" />
       <v-spacer />
       <v-toolbar-items>
         <v-btn text href="mailto:wangqiangshen@gmail.com">Hire Me</v-btn>
@@ -185,7 +185,7 @@ export default {
     items: [],
   }),
   methods: {
-    ...mapActions("menu/", ["toggleMini"]),
+    ...mapActions(["toggleMini"]),
 
     close(tab) {
       const indexTab = this.tabs.findIndex((el) => el.path === tab.path);

@@ -40,6 +40,9 @@ const actions = {
   },
   setTheme({ commit }, theme) {
     commit('SET_THEME', theme);
+  },
+  hideSnackbar({ commit }) {
+    commit('HIDE_SNACKBAR')
   }
 };
 

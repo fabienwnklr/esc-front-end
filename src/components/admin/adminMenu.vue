@@ -72,21 +72,21 @@ export default {
       {
         icon: "mdi-shield-account-outline",
         text: "Admin dashboad",
-        to: "/admin"
+        to: "/admin",
       },
-      { icon: "mdi-account", text: "Mon Profil", to: "/profil" }
-    ]
+      { icon: "mdi-account", text: "Mon Profil", to: "/profil" },
+    ],
   }),
   methods: {
-    ...mapActions("menu/", ["toggleMini"]),
+    ...mapActions(["toggleMini"]),
     disconnect() {
       this.$logout();
-    }
+    },
   },
   computed: {
     ...mapState({
-      mini: state => state.menu.mini
-    })
-  }
+      mini: (state) => state.menu.mini,
+    }),
+  },
 };
 </script>

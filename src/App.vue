@@ -21,7 +21,7 @@
       >
         {{ snackbar.text }}
         <template #action="{ attrs }">
-          <v-btn icon v-bind="attrs" @click="$store.commit('HIDE_SNACKBAR')">
+          <v-btn icon v-bind="attrs" @click="$store.dispatch('hideSnackbar')">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </template>
@@ -121,7 +121,7 @@ export default {
         return this.getSnackbar;
       },
       set(val) {
-        this.$store.commit("SHOW_SNACKBAR", val);
+        this.$store.dispatch("showSnackbar", val);
       },
     },
   },

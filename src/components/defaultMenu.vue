@@ -22,7 +22,7 @@
           </v-row>
           <v-list-item v-else :key="i" link :to="item.to">
             <v-list-item-action>
-              <v-tooltip right :disabled="!$store.mini">
+              <v-tooltip right :disabled="!mini">
                 <template v-slot:activator="{ on }">
                   <v-icon v-on="on">{{ item.icon }}</v-icon>
                 </template>
@@ -47,23 +47,23 @@ export default {
     drawer: true,
     items: [
       { heading: "Principal" },
-      { icon: "mdi-home", text: "Accueil", to: "/" },
+      { icon: "mdi-home", text: "Home", to: "/" },
       // { icon: 'mdi-new-box', text: 'Créer un tournoi', to: '/new-tournament' },
-      { icon: "mdi-trophy", text: "Tournois", to: "/tournaments" },
+      { icon: "mdi-trophy", text: "Tournaments", to: "/tournaments" },
       { icon: "mdi-twitch", text: "Live", to: "/live" },
       // { icon: 'mdi-email-send-outline', text: 'Contact', to: '/contact' },
       { heading: "Compte" },
-      { icon: "mdi-account-plus", text: "Inscription", to: "/register" },
-      { icon: "mdi-power-standby", text: "Connexion", to: "/login" }
-    ]
+      { icon: "mdi-account-plus", text: "Register", to: "/register" },
+      { icon: "mdi-power-standby", text: "Login", to: "/login" },
+    ],
   }),
   computed: {
     ...mapState({
-      mini: state => state.menu.mini
-    })
+      mini: (state) => state.menu.mini,
+    }),
   },
   methods: {
-    ...mapActions("menu/", ["toggleMini"])
-  }
+    ...mapActions(["toggleMini"]),
+  },
 };
 </script>

@@ -108,9 +108,9 @@ export default {
               }
               this.$emit("logged");
               if (response.data.user.is_admin) {
-                this.$store.commit("SET_ADMIN");
+                this.$store.dispatch("setAdmin");
               } else {
-                this.$store.commit("SET_LOGGIN");
+                this.$store.dispatch("setLogged");
               }
             }
           })
