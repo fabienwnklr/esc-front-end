@@ -10,11 +10,11 @@
       </v-col>
     </v-row>
     <v-row v-else class="mx-auto">
-      <h1 v-if="tournaments.length === 0 && this.$data.logged">
+      <h1 v-if="tournaments.length === 0 && logged">
         Aucun tournoi disponible pour le moment... Si t'y remédié ?
-        <v-tbn to="/create-tournament">Créer un tournoi</v-tbn>
+        <v-btn to="new-tournament">Créer un tournoi</v-btn>
       </h1>
-      <h1 v-else-if="tournaments.length === 0 && !this.$data.logged">
+      <h1 v-else-if="tournaments.length === 0 && !logged">
         Aucun tournoi disponible pour le moment... Si t'y remédié ?
         <v-btn to="login">Connecte toi</v-btn>
       </h1>
@@ -46,10 +46,7 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-img
-            :src="`https://picsum.photos/id/${i + 55}/200/200`"
-            height="194"
-          ></v-img>
+          <v-img :src="`https://picsum.photos/id/${i + 55}/200/200`" height="194"></v-img>
 
           <v-card-text>
             Détails
@@ -71,14 +68,8 @@
                 </v-chip>
               </li>
               <li class="my-2">
-                Participants {{ tournament.users.length }}/{{
-                  tournament.nb_participant
-                }}
-                <span
-                  class="mx-2"
-                  v-for="(user, i) in tournament.users"
-                  :key="i"
-                >
+                Participants {{ tournament.users.length }}/{{ tournament.nb_participant }}
+                <span class="mx-2" v-for="(user, i) in tournament.users" :key="i">
                   {{ user.username }},
                 </span>
               </li>
@@ -95,9 +86,7 @@
                 </div>
               </template>
               <span>{{
-                tournament.full === false
-                  ? `Join tournament`
-                  : `Tournament is full`
+                tournament.full === false ? `Join tournament` : `Tournament is full`
               }}</span>
             </v-tooltip>
 
@@ -114,12 +103,7 @@
 
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  v-bind="attrs"
-                  v-on="on"
-                  :to="`tournament/${tournament.id}`"
-                >
+                <v-btn icon v-bind="attrs" v-on="on" :to="`tournament/${tournament.id}`">
                   <v-icon>mdi-page-next-outline</v-icon>
                 </v-btn>
               </template>
@@ -142,22 +126,19 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   data: () => ({
     tournaments: [],
     canJoin: true,
-    loaded: false
+    loaded: false,
   }),
   methods: {
     getTournaments() {
-      this.$http("/tournament").then(result => {
-        this.tournaments = result.data.map(item => {
-          item.createdAt = new Date(item.createdAt)
-            .toLocaleString()
-            .slice(0, -3);
-          item.start_date = new Date(item.start_date)
-            .toLocaleString()
-            .slice(0, -3);
+      this.$http("/tournament").then((result) => {
+        this.tournaments = result.data.map((item) => {
+          item.createdAt = new Date(item.createdAt).toLocaleString().slice(0, -3);
+          item.start_date = new Date(item.start_date).toLocaleString().slice(0, -3);
           item.full = item.nb_participant === item.users.length;
         });
         this.tournaments = result.data;
@@ -169,10 +150,13 @@ export default {
         return false;
       }
       return true;
-    }
+    },
   },
   mounted() {
     this.getTournaments();
-  }
+  },
+  computed: {
+    ...mapGetters(["logged"]),
+  },
 };
 </script>

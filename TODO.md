@@ -4,4 +4,6 @@
 - Finir d'ajouter les skeletons loader partout
 - Ajout de mode de jeu avec liaison au(x) jeu(x)
 - Stocker les data user dans le store (token etc)
-- Utiliser la locale en storage
+- Utiliser la locale dans le store
+- Virer locale storage
+-  Appeler la requête checkToken ici beforeEach router

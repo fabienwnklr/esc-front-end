@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-app-bar app clipped-left color="primary">
-      <v-app-bar-nav-icon @click="toggleMenu" />
+      <v-app-bar-nav-icon @click="toggleMini" />
       <span class="title ml-3 mr-5">{{ this.$webSiteName }}</span>
       <v-icon>mdi-xbox-controller</v-icon>
     </v-app-bar>
@@ -35,7 +35,7 @@
           </v-list-item>
         </template>
         <template>
-          <v-list-item @click="disconnect()">
+          <v-list-item @click="$store.dispatch('logout')">
             <v-list-item-action>
               <v-tooltip right :disabled="!mini">
                 <template v-slot:activator="{ on }">
@@ -60,7 +60,6 @@ export default {
   name: "userMenu",
   data: () => ({
     drawer: true,
-    mini: false,
     items: [
       { heading: "Principal" },
       { icon: "mdi-home", text: "Accueil", to: "/" },
@@ -69,19 +68,19 @@ export default {
       { icon: "mdi-twitch", text: "Live", to: "/live" },
       // { icon: 'mdi-email-send-outline', text: 'Contact', to: '/contact' },
       { heading: "Compte" },
-      { icon: "mdi-account", text: "Mon Profil", to: "/profil" }
-    ]
+      { icon: "mdi-account", text: "Mon Profil", to: "/profil" },
+    ],
   }),
   methods: {
     disconnect() {
       this.$logout();
     },
-    ...mapActions("menu/", ["toggleMini"])
+    ...mapActions("menu/", ["toggleMini"]),
   },
   computed: {
     ...mapState({
-      mini: state => state.menu.mini
-    })
-  }
+      mini: (state) => state.menu.mini,
+    }),
+  },
 };
 </script>

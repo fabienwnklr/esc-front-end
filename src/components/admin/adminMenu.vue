@@ -35,7 +35,7 @@
           </v-list-item>
         </template>
         <template>
-          <v-list-item @click="disconnect()">
+          <v-list-item @click="$store.dispatch('logout')">
             <v-list-item-action>
               <v-tooltip right :disabled="!mini">
                 <template v-slot:activator="{ on }">
@@ -79,9 +79,6 @@ export default {
   }),
   methods: {
     ...mapActions(["toggleMini"]),
-    disconnect() {
-      this.$logout();
-    },
   },
   computed: {
     ...mapState({

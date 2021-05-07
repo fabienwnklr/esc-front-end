@@ -97,6 +97,8 @@ export default {
           .then((response) => {
             localStorage.setItem("user", JSON.stringify(response.data.user));
             localStorage.setItem("jwt", response.data.token);
+            _this.$store.dispatch("setUser", response.data.user);
+
             _this.$http.defaults.headers.common[
               "Authorization"
             ] = `Bearer ${response.data.token}`;
@@ -117,9 +119,14 @@ export default {
           .catch((err) => {
             console.log(err);
             this.loading = false;
-            this.alert = err.response.data.message;
+            this.alert = err.response.data.message || err;
             this.snackbar = true;
           });
+      } else {
+        this.$store.dispatch("showSidebar", {
+          text: "Please, rensiegnez tous les champs",
+          color: "orange",
+        });
       }
     },
   },

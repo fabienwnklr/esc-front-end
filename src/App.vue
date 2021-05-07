@@ -48,11 +48,7 @@ export default {
     adminMenu,
     adminMenuFull,
   },
-  data: () => ({
-    guest: true,
-    logged: false,
-    admin: false,
-  }),
+  data: () => ({}),
   methods: {
     /**
      * function for check if user connected
@@ -72,63 +68,52 @@ export default {
               _this
                 .$http("/checkToken")
                 .then(() => {
-                  _this.guest = false;
-                  _this.logged = true;
                   if (
                     user !== null &&
                     typeof user.is_admin !== "undefined" &&
                     user.is_admin === true
                   ) {
-                    _this.admin = true;
+                    if (_this.admin === false) {
+                      _this.$store.dispatch("setAdmin");
+                    }
                   } else {
-                    _this.admin = false;
+                    if (_this.logged === false) {
+                      _this.$store.dispatch("setLogged");
+                    }
                   }
                 })
                 .catch((err) => {
                   console.error(err);
-                  _this.$logout();
-                  return false;
+                  _this.$store.dispatch("logout");
                 });
             })
             .catch((err) => {
               console.error(err);
               _this.guest = true;
               _this.logged = false;
-              _this.$logout();
+              _this.$store.dispatch("logout");
             });
         } else {
-          this.guest = true;
-          this.logged = false;
+          _this.$store.dispatch("setGuest");
         }
       } catch (error) {
         console.error(error);
       }
-    },
-    logout() {
-      this.guest = true;
-      this.logged = false;
-      this.admin = false;
-      this.$logout();
     },
   },
   updated() {
     this.detectUser();
   },
   computed: {
-    ...mapGetters(["getSnackbar"]),
-    snackbar: {
-      get() {
-        return this.getSnackbar;
-      },
-      set(val) {
-        this.$store.dispatch("showSnackbar", val);
-      },
-    },
+    ...mapGetters(["snackbar", "guest", "logged", "admin"]),
   },
 };
 </script>
 
 <style>
+html {
+  overflow: auto;
+}
 #keep .v-navigation-drawer__border {
   display: none;
 }

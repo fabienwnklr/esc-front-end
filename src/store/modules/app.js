@@ -18,10 +18,10 @@ const state = {
 };
 
 const getters = {
-  getSnackbar: (state) => state.snackbar,
-  getLocale: (state) => state.locale,
-  getTheme: (state) => state.theme,
-  getNotifications: (state) => state.notifications
+  snackbar: (state) => state.snackbar,
+  locale: (state) => state.locale,
+  theme: (state) => state.theme,
+  notifications: (state) => state.notifications
 }
 
 const actions = {
@@ -40,6 +40,9 @@ const actions = {
   },
   setTheme({ commit }, theme) {
     commit('SET_THEME', theme);
+  },
+  showSnackbar({ commit }, payload) {
+    commit('SHOW_SNACKBAR', payload);
   },
   hideSnackbar({ commit }) {
     commit('HIDE_SNACKBAR')

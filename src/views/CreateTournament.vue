@@ -1,14 +1,15 @@
 <template v-on:load="getGames">
   <v-container>
     <h2 class="mt-5">Création d'un tournoi</h2>
-    <form>
+    <v-form v-model="valid" ref="createTournamentForm">
       <v-row>
         <v-col cols="12" sm="12" md="6" lg="4">
           <v-text-field
             v-model="name"
             :counter="54"
-            label="Nom du tournoi"
+            label="Tournament name"
             outlined
+            :rules="rules.name"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="12" md="6" lg="4">
@@ -18,10 +19,11 @@
             :items="games"
             item-text="name"
             item-value="id"
-            no-data-text="Aucun résultats"
-            label="Choisis ton jeu..."
+            no-data-text="No results..."
+            label="Chose game"
             clearable
             outlined
+            :rules="rules.game"
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" sm="12" md="6" lg="4">
@@ -32,10 +34,11 @@
             item-text="name"
             item-value="id"
             outlined
-            no-data-text="Aucun résultats"
-            label="Choisis ta plateforme..."
+            no-data-text="No results"
+            label="Chose platform..."
             clearable
             multiple
+            :rules="rules.platform"
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" sm="12" md="6" lg="4">
@@ -49,6 +52,7 @@
             no-data-text="Aucun résultats"
             label="Choisis ton mode de jeu..."
             clearable
+            :rules="rules.gameMode"
           ></v-autocomplete>
         </v-col>
         <v-col cols="12" sm="12" md="6" lg="4">
@@ -58,6 +62,8 @@
             label="Nombre de participant"
             prepend-inner-icon="mdi-counter"
             outlined
+            :rules="rules.nbParticipant"
+            min="1"
           ></v-text-field>
         </v-col>
         <v-col cols="12" sm="12" md="6" lg="4">
@@ -70,6 +76,7 @@
             :time-picker-props="timeProps"
             okText="Valider"
             clearText="Vider"
+            :rules="rules.date"
           >
             <template slot="dateIcon">
               <v-icon>mdi-calendar</v-icon>
@@ -94,56 +101,57 @@
           <div class="text-right mb-5 mt-5">
             <v-btn class="mr-4" @click="clearForm">Vider</v-btn>
             <v-btn
-              class=" green white--text"
+              class="green white--text"
               @click="createTournament"
               :loading="loading"
+              :disabled="!valid || loading"
             >
               Créer
             </v-btn>
           </div>
         </v-col>
       </v-row>
-    </form>
-
-    <v-snackbar v-model="snackbar">
-      {{ this.alert }}
-
-      <template v-slot:action="{ attrs }">
-        <v-btn color="red" text v-bind="attrs" @click="snackbar = false">
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
+    </v-form>
   </v-container>
 </template>
 
 <script>
 export default {
   data: () => ({
-    gameModeSelected: '',
+    gameModeSelected: "",
     gameSelected: "",
     platformsSelected: [],
     loading: false,
-    alert: null,
+    valid: false,
     snackbar: false,
     name: "",
     games: [],
     platforms: [],
     gameModes: [],
-    start_date: '',
-    nb_participant: '',
+    start_date: "",
+    nb_participant: "",
     details: "",
-    timeoutClear: null,
+    rules: {
+      name: [
+        (v) => !!v || "Name required",
+        (v) => v.length > 3 || "Please enter a real name...",
+      ],
+      game: [(v) => !!v || "Game required"],
+      platform: [(v) => !!v || "Platform required"],
+      gameMode: [(v) => !!v || "Game mode required"],
+      nbParticipant: [(v) => !!v || "Number participant required"],
+      date: [(v) => !!v || "Date required"],
+    },
     textFieldProps: {
       prependInnerIcon: "mdi-calendar",
-      outlined: true
+      outlined: true,
     },
     dateProps: {
-      locale: 'fr',
-      firstDayOfWeek: 1
+      locale: "fr",
+      firstDayOfWeek: 1,
     },
     timeProps: {
-      format: '24h'
+      format: "24h",
     },
   }),
   methods: {
@@ -165,32 +173,26 @@ export default {
         })
         .then((result) => {
           this.loading = false;
-          this.alert = result.data.message;
-          this.snackbar = true;
           this.clearForm();
-          this.timeoutClear = setTimeout(this.clearAlert, 4000)
+          this.$store.dispatch("showSnackbar", {
+            text: result.data.message,
+            color: "red",
+          });
         })
         .catch((err) => {
           console.error(err);
           this.loading = false;
-          this.alert = err.message;
-          this.snackbar = true;
+          this.$store.dispatch("showSnackbar", { text: result.message, color: "red" });
         });
-    },
-    clearAlert() {
-      this.alert = null;
-      this.loading = false;
-      this.snackbar = false;
     },
     clearForm() {
       this.name = "";
       this.gameSelected = "";
       this.platformsSelected = [];
       this.name = "";
-      this.start_date = '';
-      this.nb_participant = '';
+      this.start_date = "";
+      this.nb_participant = "";
       this.details = "";
-      this.timeoutClear = null;
     },
     getGames() {
       this.$http("/game")
@@ -199,7 +201,10 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.alert = err.response.data.message;
+          this.$store.dispatch("showSnackbar", {
+            text: err.response.data.message,
+            color: "red",
+          });
         });
     },
     getPlatforms() {
@@ -209,19 +214,25 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.alert = err.response.data.message;
+          this.$store.dispatch("showSnackbar", {
+            text: err.response.data.message,
+            color: "red",
+          });
         });
     },
     getGameModes() {
-      this.$http("/gamesmode")
+      this.$http("/gameMode")
         .then((result) => {
           this.gameModes = result.data;
         })
         .catch((err) => {
           this.loading = false;
-          this.alert = err.response.data.message;
+          this.$store.dispatch("showSnackbar", {
+            text: err.response.data.message,
+            color: "red",
+          });
         });
-    }
+    },
   },
   created() {
     this.getGames();
