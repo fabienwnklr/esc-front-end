@@ -13,11 +13,12 @@
       <!-- global snackbar -->
       <v-snackbar
         v-model="snackbar.show"
-        :timeout="3000"
         app
-        top
+        bottom
+        right
         centered
         :color="snackbar.color"
+        @close="removeFromStore"
       >
         {{ snackbar.text }}
         <template #action="{ attrs }">
@@ -50,6 +51,9 @@ export default {
   },
   data: () => ({}),
   methods: {
+    removeFromStore() {
+      this.$store.dispatch("hideSnackbar");
+    },
     /**
      * function for check if user connected
      * @return {boolean}
@@ -106,6 +110,9 @@ export default {
   },
   computed: {
     ...mapGetters(["snackbar", "guest", "logged", "admin"]),
+  },
+  beforeMount() {
+    window.addEventListener("beforeunload", () => this.$store.dispatch("hideSnackbar"));
   },
 };
 </script>
