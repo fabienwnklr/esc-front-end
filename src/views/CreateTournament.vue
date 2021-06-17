@@ -69,7 +69,7 @@
         <v-col cols="12" sm="12" md="6" lg="4">
           <v-datetime-picker
             v-model="start_date"
-            date-format="MM/dd/yyyy"
+            date-format="dd/mm/yyyy"
             label="Date du tournoi"
             :text-field-props="textFieldProps"
             :date-picker-props="dateProps"
