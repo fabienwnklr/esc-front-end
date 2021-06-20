@@ -56,11 +56,9 @@
         <v-list class="pa-0">
           <v-list-item
             v-for="(item, index) in profileMenus"
-            :to="!item.href ? { name: item.name } : null"
-            :href="item.href"
-            @click="item.click"
+            :to="item.href ? item.href : null"
             :disabled="item.disabled"
-            :target="item.target"
+            @click="item.click"
             rel="noopener"
             :key="index"
           >
@@ -69,6 +67,14 @@
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title>{{ item.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item @click="$store.dispatch('logout')">
+            <v-list-item-action>
+              <v-icon>mdi-power</v-icon>
+            </v-list-item-action>
+            <v-list-item-content>
+              <v-list-item-title>Logout</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -88,21 +94,15 @@ export default {
     profileMenus: [
       {
         icon: "mdi-account",
-        href: "#",
+        href: "profil",
         title: "Profile",
-        click: "handleProfile",
+        click: "",
       },
       {
         icon: "mdi-cog",
-        href: "#",
+        href: "",
         title: "Settings",
-        click: "handleSetting",
-      },
-      {
-        icon: "mdi-power",
-        href: "#",
-        title: "Logout",
-        click: "handleLogut",
+        click: "",
       },
     ],
     localeText: navigator.language.split("-")[0],
@@ -115,9 +115,6 @@ export default {
   },
   methods: {
     ...mapActions(["toggleMini"]),
-    handleProfile() {},
-    handleSetting() {},
-    handleLogut() {},
   },
 };
 </script>
