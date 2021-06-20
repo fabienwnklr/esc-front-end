@@ -12,6 +12,12 @@ export default new Vuetify({
     themes: {
       light: {
         primary: colors.indigo.base,
+        accent: colors.shades.white,
+        secondary: colors.indigo.lighten2,
+        error: colors.red.accent3
+      },
+      dark: {
+        primary: colors.indigo.base,
         secondary: colors.indigo.lighten2,
         accent: colors.shades.black,
         error: colors.red.accent3
