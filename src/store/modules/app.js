@@ -21,8 +21,8 @@ const getters = {
   snackbar: (state) => state.snackbar,
   locale: (state) => state.locale,
   theme: (state) => state.theme,
-  notifications: (state) => state.notifications
-}
+  notifications: (state) => state.notifications,
+};
 
 const actions = {
   addNotification({ commit }, { text, id }) {
@@ -39,14 +39,14 @@ const actions = {
     commit("CLEAR_NOTIFICATION");
   },
   setTheme({ commit }, theme) {
-    commit('SET_THEME', theme);
+    commit("SET_THEME", theme);
   },
   showSnackbar({ commit }, payload) {
-    commit('SHOW_SNACKBAR', payload);
+    commit("SHOW_SNACKBAR", payload);
   },
   hideSnackbar({ commit }) {
-    commit('HIDE_SNACKBAR')
-  }
+    commit("HIDE_SNACKBAR");
+  },
 };
 
 const mutations = {
@@ -69,8 +69,8 @@ const mutations = {
   },
   HIDE_SNACKBAR(state) {
     state.snackbar.show = false;
-    state.snackbar.color = '';
-    state.snackbar.text = '';
+    state.snackbar.color = "";
+    state.snackbar.text = "";
   },
 };
 

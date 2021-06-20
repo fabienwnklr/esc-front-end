@@ -1,5 +1,24 @@
 <template>
   <main>
+    <v-dialog v-model="dialog" max-width="500">
+      <v-card>
+        <v-card-title class="text-h5">Are you sure to join this tournament?</v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="red darken-1" outlined @click="dialog = false"> Cancel </v-btn>
+
+          <v-btn
+            color="green darken-1"
+            outlined
+            :loaded="joinLoaded"
+            @click="confirmJoin"
+          >
+            Join
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-row v-if="loaded == false" class="mx-auto my-2">
       <v-col cols="12" xl="2" lg="4" md="4" sm="4" v-for="i in 6" :key="i">
         <v-skeleton-loader
@@ -51,7 +70,7 @@
           <v-card-text>
             Détails
             <ul>
-              <li class="my-2">Date/Heures : {{ tournament.start_date }}</li>
+              <li class="my-2">Date/Heures de création : {{ tournament.start_date }}</li>
               <li class="my-2">
                 <v-chip small>
                   {{ tournament.games[0].name }}
@@ -79,18 +98,20 @@
           </v-card-text>
 
           <v-card-actions>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <div v-on="on" v-bind="attrs">
-                  <v-btn :disabled="tournament.full" outlined color="primary">
-                    Participer
-                  </v-btn>
-                </div>
-              </template>
-              <span>{{
-                tournament.full === false ? `Join tournament` : `Tournament is full`
-              }}</span>
-            </v-tooltip>
+            <div v-on="on" v-bind="attrs">
+              <v-btn
+                v-if="!tournament.userParticipate"
+                @click.native="joinTournament(tournament.id)"
+                :disabled="tournament.full"
+                outlined
+                color="primary"
+              >
+                Participer
+              </v-btn>
+              <v-btn v-else outlined disabled color="secondary">
+                Already participate
+              </v-btn>
+            </div>
 
             <v-spacer></v-spacer>
 
@@ -134,14 +155,21 @@ export default {
     tournaments: [],
     canJoin: true,
     loaded: false,
+    joinLoaded: false,
+    dialog: false,
+    current_id: 0,
   }),
   methods: {
     getTournaments() {
+      const _this = this;
       this.$http("/tournament").then((result) => {
         this.tournaments = result.data.map((item) => {
           item.createdAt = new Date(item.createdAt).toLocaleString().slice(0, -3);
           item.start_date = new Date(item.start_date).toLocaleString().slice(0, -3);
           item.full = item.nb_participant === item.users.length;
+          item.userParticipate = item.users.find(
+            (user) => user.user_tournament.UserId === _this.$store.getters.user.id
+          );
         });
         this.tournaments = result.data;
         this.loaded = true;
@@ -152,6 +180,31 @@ export default {
         return false;
       }
       return true;
+    },
+    joinTournament(id_tournament) {
+      this.current_id = id_tournament;
+      this.dialog = true;
+    },
+    confirmJoin() {
+      this.$http
+        .post("/tournament/addUser", {
+          tournament: this.current_id,
+          user: this.$store.getters.user.id,
+        })
+        .then((res) => {
+          this.getTournaments();
+          this.$store.dispatch("showSnackbar", {
+            text: res.data.message,
+            color: "success",
+          });
+          this.dialog = false;
+          this.current_id = 0;
+        })
+        .catch((err) => {
+          this.$store.dispatch("showSnackbar", { text: err.message, color: "red" });
+          this.dialog = false;
+          this.current_id = 0;
+        });
     },
   },
   mounted() {
