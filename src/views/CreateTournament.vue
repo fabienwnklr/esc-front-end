@@ -176,7 +176,7 @@ export default {
           this.clearForm();
           this.$store.dispatch("showSnackbar", {
             text: result.data.message,
-            color: "red",
+            color: "success",
           });
         })
         .catch((err) => {
