@@ -1,6 +1,6 @@
 <template>
   <main>
-    <v-row v-if="loaded == false" class="mx-auto">
+    <v-row v-if="loaded == false" class="mx-auto my-2">
       <v-col cols="12" xl="2" lg="4" md="4" sm="4" v-for="i in 6" :key="i">
         <v-skeleton-loader
           max-width="344"
@@ -9,7 +9,7 @@
         ></v-skeleton-loader>
       </v-col>
     </v-row>
-    <v-row v-else class="mx-auto">
+    <v-row v-else class="mx-auto my-2">
       <h1 v-if="tournaments.length === 0 && logged">
         Aucun tournoi disponible pour le moment... Si t'y remédié ?
         <v-btn to="new-tournament">Créer un tournoi</v-btn>
@@ -20,14 +20,14 @@
       </h1>
       <v-col
         cols="12"
-        xl="2"
+        xl="3"
         lg="4"
         md="4"
-        sm="4"
+        sm="6"
         v-for="(tournament, i) in tournaments"
         :key="i"
       >
-        <v-card max-width="344" class="mx-auto">
+        <v-card class="mx-auto">
           <v-list-item>
             <v-list-item-avatar color="">
               <v-img
