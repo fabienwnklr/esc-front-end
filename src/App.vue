@@ -16,7 +16,6 @@
         app
         bottom
         right
-        centered
         :color="snackbar.color"
         @close="removeFromStore"
       >
