@@ -1,12 +1,12 @@
 <template>
   <v-card tile class="notes">
-    <v-toolbar tile flat>
+    <v-toolbar v-if="items.length !== 0" tile flat>
       <v-subheader>Notification</v-subheader>
       <v-spacer />
       <v-btn text @click="handleClearNotification">clear</v-btn>
     </v-toolbar>
     <v-divider />
-    <v-card-text class="pa-0">
+    <v-card-text v-if="items.length !== 0" class="pa-0">
       <v-list dense class="pa-0 notes_list">
         <template v-for="(item, index) in items">
           <v-list-item :key="index" @click="handleClick">
@@ -27,12 +27,14 @@
       <v-btn block text class="ma-0">All</v-btn>
       <v-divider></v-divider>
     </v-card-text>
+
+    <v-card-text v-else class=""> Aucune notifications. </v-card-text>
   </v-card>
 </template>
 
 <script>
 export default {
-  name:'notifications-list',
+  name: "notifications-list",
   props: {
     items: {
       type: Array,
@@ -40,17 +42,17 @@ export default {
     },
   },
   data() {
-    return {}
+    return {};
   },
   methods: {
     handleClick: (e) => {
-      console.log(e)
+      console.log(e);
     },
     handleClearNotification() {
-      this.$store.dispatch('clearNotificaton')
+      this.$store.dispatch("clearNotificaton");
     },
   },
-}
+};
 </script>
 <style lang="sass" scoped>
 .notes_list

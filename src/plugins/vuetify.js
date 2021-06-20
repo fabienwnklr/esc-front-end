@@ -6,8 +6,17 @@ import DatetimePicker from 'vuetify-datetime-picker'
 
 Vue.use(Vuetify)
 Vue.use(DatetimePicker)
+
+// Translation provided by Vuetify (javascript)
+import fr from 'vuetify/es5/locale/fr';
+import en from 'vuetify/es5/locale/en.js'
+
 // custom theme
 export default new Vuetify({
+  lang: {
+    locales: { fr, en },
+    current: 'fr',
+  },
   theme: {
     themes: {
       light: {
