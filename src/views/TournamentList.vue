@@ -69,8 +69,10 @@
               </li>
               <li class="my-2">
                 Participants {{ tournament.users.length }}/{{ tournament.nb_participant }}
-                <span class="mx-2" v-for="(user, i) in tournament.users" :key="i">
-                  {{ user.username }},
+                :
+                <span class="mx-r" v-for="(user, i) in tournament.users" :key="i">
+                  {{ user.username }}
+                  {{ i === tournament.users.length - 1 ? "" : "," }}
                 </span>
               </li>
             </ul>
