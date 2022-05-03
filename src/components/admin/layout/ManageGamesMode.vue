@@ -91,7 +91,7 @@
         ></v-text-field>
       </template>
 
-      <template v-slot:item.games="{ item }">
+      <template v-slot:[`item.games`]="{ item }">
         <span v-if="item.games.length === 1"
           >{{ item.games.map((g) => g.name).toString() }}
         </span>
@@ -222,14 +222,14 @@ export default {
           .then((res) => {
             this.games = res.data;
             this.editedIndex = this.gameMode.indexOf(item);
-            item.games = item.games.map((game) => game.id);
+            // item.games = item.games.map((game) => game.id);
             this.editedItem = Object.assign({}, item);
             this.dialog = true;
           })
           .catch((err) => console.error(err));
       } else {
         this.editedIndex = this.gameMode.indexOf(item);
-        item.games = item.games.map((game) => game.id);
+        // item.games = item.games.map((game) => game.id);
         this.editedItem = Object.assign({}, item);
         this.dialog = true;
       }
@@ -296,7 +296,7 @@ export default {
             _this.alert = true;
             _this.alertMsg = res.data.message;
             // On fusionne l'objet avec la nouvelle modif pour éviter de tout refresh
-            Object.assign(_this.gameMode[index], res.data.values);
+            _this.gameMode[index].games = res.data.games;
           })
           .catch((err) => console.error(err));
       } else {

@@ -106,10 +106,10 @@
                 outlined
                 color="primary"
               >
-                Participer
+                Join
               </v-btn>
               <v-btn v-else outlined disabled color="secondary">
-                Already participate
+                Already joinded
               </v-btn>
             </div>
 
