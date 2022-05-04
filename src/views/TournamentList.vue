@@ -98,7 +98,7 @@
           </v-card-text>
 
           <v-card-actions>
-            <div v-on="on" v-bind="attrs">
+            <div>
               <v-btn
                 v-if="!tournament.userParticipate"
                 @click.native="joinTournament(tournament.id)"
