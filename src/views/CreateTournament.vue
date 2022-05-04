@@ -132,27 +132,24 @@ export default {
     nb_participant: "",
     details: "",
     rules: {
-      name: [
-        (v) => !!v || "Name required",
-        (v) => v.length > 3 || "Please enter a real name...",
-      ],
-      game: [(v) => !!v || "Game required"],
-      platform: [(v) => !!v || "Platform required"],
-      gameMode: [(v) => !!v || "Game mode required"],
-      nbParticipant: [(v) => !!v || "Number participant required"],
-      date: [(v) => !!v || "Date required"],
+      name: [v => !!v || "Name required"],
+      game: [v => !!v || "Game required"],
+      platform: [v => !!v || "Platform required"],
+      gameMode: [v => !!v || "Game mode required"],
+      nbParticipant: [v => !!v || "Number participant required"],
+      date: [v => !!v || "Date required"]
     },
     textFieldProps: {
       prependInnerIcon: "mdi-calendar",
-      outlined: true,
+      outlined: true
     },
     dateProps: {
       locale: "fr",
-      firstDayOfWeek: 1,
+      firstDayOfWeek: 1
     },
     timeProps: {
-      format: "24h",
-    },
+      format: "24h"
+    }
   }),
   methods: {
     createTournament() {
@@ -169,20 +166,27 @@ export default {
           game_mode: this.gameModeSelected,
           authorId: authorId,
           nb_participant: this.nb_participant,
-          details: this.details,
+          details: this.details
         })
-        .then((result) => {
-          this.loading = false;
-          this.clearForm();
-          this.$store.dispatch("showSnackbar", {
-            text: result.data.message,
-            color: "success",
-          });
+        .then(result => {
+          try {
+            this.loading = false;
+            this.clearForm();
+            this.$store.dispatch("showSnackbar", {
+              text: result.data.message,
+              color: "success"
+            });
+          } catch (error) {
+            console.error(error);
+          }
         })
-        .catch((err) => {
+        .catch(err => {
           console.error(err);
           this.loading = false;
-          this.$store.dispatch("showSnackbar", { text: result.message, color: "red" });
+          this.$store.dispatch("showSnackbar", {
+            text: "Error during creation, please try again later",
+            color: "red"
+          });
         });
     },
     clearForm() {
@@ -193,52 +197,53 @@ export default {
       this.start_date = "";
       this.nb_participant = "";
       this.details = "";
+      this.$refs.createTournamentForm.reset();
     },
     getGames() {
       this.$http("/game")
-        .then((result) => {
+        .then(result => {
           this.games = result.data;
         })
-        .catch((err) => {
+        .catch(err => {
           this.loading = false;
           this.$store.dispatch("showSnackbar", {
             text: err.response.data.message,
-            color: "red",
+            color: "red"
           });
         });
     },
     getPlatforms() {
       this.$http("/platform")
-        .then((result) => {
+        .then(result => {
           this.platforms = result.data;
         })
-        .catch((err) => {
+        .catch(err => {
           this.loading = false;
           this.$store.dispatch("showSnackbar", {
             text: err.response.data.message,
-            color: "red",
+            color: "red"
           });
         });
     },
     getGameModes() {
       this.$http("/gameMode")
-        .then((result) => {
+        .then(result => {
           this.gameModes = result.data;
         })
-        .catch((err) => {
+        .catch(err => {
           this.loading = false;
           this.$store.dispatch("showSnackbar", {
             text: err.response.data.message,
-            color: "red",
+            color: "red"
           });
         });
-    },
+    }
   },
   created() {
     this.getGames();
     this.getPlatforms();
     this.getGameModes();
-  },
+  }
 };
 </script>
 
