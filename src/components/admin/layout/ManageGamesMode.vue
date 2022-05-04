@@ -18,12 +18,10 @@
           <v-toolbar-title>Modes de jeux</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
+          <v-btn color="primary" dark class="mb-2" @click="addItem">
+            Ajouter
+          </v-btn>
           <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
-                Ajouter
-              </v-btn>
-            </template>
             <v-card>
               <v-card-title>
                 <span class="headline">{{ formTitle }}</span>
@@ -60,7 +58,9 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close"> Annuler </v-btn>
+                <v-btn color="blue darken-1" text @click="close">
+                  Annuler
+                </v-btn>
                 <v-btn color="green" text @click="save"> Valider </v-btn>
               </v-card-actions>
             </v-card>
@@ -72,8 +72,13 @@
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                <v-btn color="blue darken-1" text @click="deleteItemConfirm(editedItem)"
+                <v-btn color="blue darken-1" text @click="closeDelete"
+                  >Cancel</v-btn
+                >
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="deleteItemConfirm(editedItem)"
                   >OK</v-btn
                 >
                 <v-spacer></v-spacer>
@@ -93,9 +98,9 @@
 
       <template v-slot:[`item.games`]="{ item }">
         <span v-if="item.games.length === 1"
-          >{{ item.games.map((g) => g.name).toString() }}
+          >{{ item.games.map(g => g.name).toString() }}
         </span>
-        <span v-else>{{ item.games.map((g) => g.name).join(", ") }} </span>
+        <span v-else>{{ item.games.map(g => g.name).join(", ") }} </span>
       </template>
 
       <template v-slot:[`item.actions`]="{ item }">
@@ -153,10 +158,10 @@ export default {
       {
         text: "Nom",
         align: "start",
-        value: "name",
+        value: "name"
       },
       { text: "Jeu(x) associé(s)", value: "games", dataType: "String" },
-      { text: "Actions", value: "actions", sortable: false },
+      { text: "Actions", value: "actions", sortable: false }
     ],
     gameMode: [],
     editedIndex: -1,
@@ -167,7 +172,7 @@ export default {
       createdBy: "",
       createdAt: "",
       updatedBy: "",
-      updatedAt: "",
+      updatedAt: ""
     },
     defaultItem: {
       id: "",
@@ -176,14 +181,16 @@ export default {
       createdBy: "",
       createdAt: "",
       updatedBy: "",
-      updatedAt: "",
-    },
+      updatedAt: ""
+    }
   }),
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "Ajoute un mode de jeu" : "Modifie le mode jeu";
-    },
+      return this.editedIndex === -1
+        ? "Ajoute un mode de jeu"
+        : "Modifie le mode jeu";
+    }
   },
 
   watch: {
@@ -192,7 +199,7 @@ export default {
     },
     dialogDelete(val) {
       val || this.closeDelete();
-    },
+    }
   },
 
   created() {
@@ -202,11 +209,11 @@ export default {
   methods: {
     initialize() {
       this.$http(`/gameMode`)
-        .then((res) => {
+        .then(res => {
           this.gameMode = res.data;
           this.loaded = true;
         })
-        .catch((err) => {
+        .catch(err => {
           this.alertColor = "red";
           this.closeColor = "black";
           this.alert = true;
@@ -216,17 +223,30 @@ export default {
         });
     },
 
+    addItem() {
+      if (this.games.length === 0) {
+        this.$http("/game")
+          .then(res => {
+            this.games = res.data;
+            this.dialog = true;
+          })
+          .catch(err => console.error(err));
+      } else {
+        this.dialog = true;
+      }
+    },
+
     editItem(item) {
       if (this.games.length === 0) {
         this.$http("/game")
-          .then((res) => {
+          .then(res => {
             this.games = res.data;
             this.editedIndex = this.gameMode.indexOf(item);
             // item.games = item.games.map((game) => game.id);
             this.editedItem = Object.assign({}, item);
             this.dialog = true;
           })
-          .catch((err) => console.error(err));
+          .catch(err => console.error(err));
       } else {
         this.editedIndex = this.gameMode.indexOf(item);
         // item.games = item.games.map((game) => game.id);
@@ -246,7 +266,7 @@ export default {
       const index = this.editedIndex;
       this.$http
         .delete(`/gameMode/${item.id}`)
-        .then((res) => {
+        .then(res => {
           _this.alertColor = "green";
           _this.closeColor = "black";
           _this.alert = true;
@@ -255,7 +275,7 @@ export default {
           _this.gameMode.splice(index, 1);
           console.log(res);
         })
-        .catch((err) => {
+        .catch(err => {
           _this.alertColor = "red";
           _this.closeColor = "black";
           _this.alert = true;
@@ -290,7 +310,7 @@ export default {
         this.editedItem.updatedBy = author;
         this.$http
           .put(`/gameMode/${this.editedItem.id}`, this.editedItem)
-          .then((res) => {
+          .then(res => {
             _this.alertColor = "green";
             _this.closeColor = "black";
             _this.alert = true;
@@ -298,20 +318,20 @@ export default {
             // On fusionne l'objet avec la nouvelle modif pour éviter de tout refresh
             _this.gameMode[index].games = res.data.games;
           })
-          .catch((err) => console.error(err));
+          .catch(err => console.error(err));
       } else {
         this.editedItem.createdBy = author;
         this.$http
           .post(`/gameMode/create`, this.editedItem)
-          .then((res) => {
+          .then(res => {
             _this.alertColor = "green";
             _this.closeColor = "black";
             _this.alert = true;
             _this.alertMsg = res.data.message;
 
-            _this.gameMode.push(res.data.values);
+            _this.gameMode.push(res.data.result);
           })
-          .catch((err) => {
+          .catch(err => {
             console.error(err);
             _this.alertColor = "red";
             _this.closeColor = "black";
@@ -320,8 +340,8 @@ export default {
           });
       }
       this.close();
-    },
-  },
+    }
+  }
 };
 </script>
 
