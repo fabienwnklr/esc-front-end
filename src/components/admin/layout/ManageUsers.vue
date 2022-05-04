@@ -89,6 +89,17 @@
           hide-details
         ></v-text-field>
       </template>
+
+
+      <template v-slot:[`item.is_admin`]="{ item }">
+        <span v-if="item.is_admin">
+          <v-icon>mdi-check</v-icon>
+        </span>
+        <span v-else>
+          <v-icon>mdi-close</v-icon>
+        </span>
+      </template>
+
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
