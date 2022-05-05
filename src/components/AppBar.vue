@@ -4,6 +4,10 @@
     <h1 class="headline">{{ this.$webSiteName }}</h1>
     <v-spacer />
     <v-toolbar-items>
+      <v-btn text to="admin">
+        <v-icon>mdi-shield-account-outline</v-icon>
+        Admin dashboard
+      </v-btn>
       <v-menu
         offset-y
         origin="center center"
@@ -93,9 +97,15 @@ export default {
     availableLanguages: [],
     profileMenus: [
       {
+        icon: "mdi-trophy",
+        href: "my-tournaments",
+        title: "Mes tournois",
+        click: "",
+      },
+      {
         icon: "mdi-account",
         href: "profil",
-        title: "Profile",
+        title: "Mon profil",
         click: "",
       },
       {
@@ -103,7 +113,7 @@ export default {
         href: "",
         title: "Settings",
         click: "",
-      },
+      }
     ],
     localeText: navigator.language.split("-")[0],
   }),

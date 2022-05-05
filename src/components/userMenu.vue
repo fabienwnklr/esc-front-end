@@ -65,8 +65,8 @@ export default {
       { icon: "mdi-trophy", text: "Tournois", to: "/tournaments" },
       { icon: "mdi-twitch", text: "Live", to: "/live" },
       // { icon: 'mdi-email-send-outline', text: 'Contact', to: '/contact' },
-      { heading: "Compte" },
-      { icon: "mdi-account", text: "Mon Profil", to: "/profil" },
+      // { heading: "Compte" },
+      // { icon: "mdi-account", text: "Mon Profil", to: "/profil" },
     ],
   }),
   methods: {

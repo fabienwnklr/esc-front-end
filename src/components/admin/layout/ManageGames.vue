@@ -47,6 +47,20 @@
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
+                         <v-autocomplete
+                        prepend-inner-icon="mdi-magnify"
+                        v-model="editedItem.platformsAvalaible"
+                        :items="platforms"
+                        item-text="name"
+                        item-value="id"
+                        outlined
+                        no-data-text="Aucun résultats"
+                        label="Platformes disponibles"
+                        clearable
+                        multiple
+                      ></v-autocomplete>
+                      </v-col>
+                      <v-col cols="12">
                         <v-file-input
                           v-model="editedItem.imgUrl"
                           show-size
@@ -169,7 +183,8 @@ export default {
       createdBy: "",
       createdAt: "",
       updatedBy: "",
-      updatedAt: ""
+      updatedAt: "",
+      platformsAvalaible: []
     },
     defaultItem: {
       id: "",
@@ -178,7 +193,8 @@ export default {
       createdBy: "",
       createdAt: "",
       updatedBy: "",
-      updatedAt: ""
+      updatedAt: "",
+      platformsAvalaible: []
     }
   }),
 
