@@ -18,18 +18,15 @@
           <v-toolbar-title>Jeux</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn
+          <v-btn
                   color="primary"
                   dark
                   class="mb-2"
-                  v-bind="attrs"
-                  v-on="on"
+                  @click="addItem"
                 >
                   Ajouter
                 </v-btn>
-              </template>
+          <v-dialog persistent v-model="dialog" max-width="500px">
             <v-form ref="gameEdit">
               <v-card>
                 <v-card-title>
@@ -44,6 +41,8 @@
                           autofocus
                           v-model="editedItem.name"
                           label="Nom du jeu"
+                          :rules="requiredRules"
+                          required
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
@@ -58,16 +57,18 @@
                         label="Platformes disponibles"
                         clearable
                         multiple
+                        required
+                        :rules="requiredRules"
                       ></v-autocomplete>
                       </v-col>
                       <v-col cols="12">
-                        <v-file-input
+                        <!-- <v-file-input
                           v-model="editedItem.imgUrl"
                           show-size
                           small-chips
                           truncate-length="15"
                           label="Photo"
-                        ></v-file-input>
+                        ></v-file-input> -->
                       </v-col>
                     </v-row>
                   </v-container>
@@ -115,6 +116,14 @@
           hide-details
         ></v-text-field>
       </template>
+
+      <template v-slot:[`item.platforms`]="{ item }">
+        <span v-if="item.platforms.length === 1"
+          >{{ item.platforms.map(g => g.name).toString() }}
+        </span>
+        <span v-else>{{ item.platforms.map(g => g.name).join(", ") }} </span>
+      </template>
+
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
@@ -171,15 +180,17 @@ export default {
         align: "start",
         value: "name"
       },
+      { text: "Platforme disponible", value: "platforms", dataType: "String" },
       { text: "Chemin photo", value: "imgUrl", dataType: "String" },
       { text: "Actions", value: "actions", sortable: false }
     ],
+    platforms: [],
     games: [],
     editedIndex: -1,
     editedItem: {
       id: "",
       name: "",
-      pathPicture: "",
+      imgUrl: null,
       createdBy: "",
       createdAt: "",
       updatedBy: "",
@@ -189,13 +200,16 @@ export default {
     defaultItem: {
       id: "",
       name: "",
-      pathPicture: "",
+      imgUrl: "",
       createdBy: "",
       createdAt: "",
       updatedBy: "",
       updatedAt: "",
       platformsAvalaible: []
-    }
+    },
+    requiredRules: [
+      (v) => !!v || "Champs requis.",
+    ],
   }),
 
   computed: {
@@ -235,14 +249,40 @@ export default {
         });
     },
 
+    addItem() {
+      if (this.platforms.length === 0) {
+        this.$http("/platform")
+          .then(res => {
+            this.platforms = res.data;
+            this.dialog = true;
+          })
+          .catch(err => console.error(err));
+      } else {
+        this.dialog = true;
+      }
+    },
+
     editItem(item) {
-      this.editedIndex = this.games.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
+      if (this.platforms.length === 0) {
+        this.$http("/platform")
+          .then(res => {
+            this.platforms = res.data;
+            // this.editedIndex = this.platforms.indexOf(item);
+            // item.platform = item.platform.map((game) => game.id);
+            // this.editedItem.platformsAvalaible = item.platforms;
+            this.dialog = true;
+          })
+          .catch(err => console.error(err));
+      } else {
+        this.editedIndex = this.platforms.indexOf(item);
+        // item.platform = item.platform.map((game) => game.id);
+        this.editedItem.platformsAvalaible = item.platforms;
+        this.dialog = true;
+      }
     },
 
     deleteItem(item) {
-      this.editedIndex = this.games.indexOf(item);
+      this.editedIndex = this.platforms.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
@@ -258,7 +298,7 @@ export default {
           _this.alert = true;
           _this.alertMsg = res.data.message;
 
-          _this.games.splice(index, 1);
+          _this.platforms.splice(index, 1);
           console.log(res);
         })
         .catch(err => {
@@ -278,6 +318,7 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       });
+      this.$refs.gameEdit.reset();
     },
 
     closeDelete() {
@@ -289,6 +330,7 @@ export default {
     },
 
     save() {
+      if (!this.$refs.gameEdit.validate()) return;
       const author = JSON.parse(localStorage.getItem("user")).username;
       const _this = this;
       const index = this.editedIndex;
@@ -306,11 +348,9 @@ export default {
           })
           .catch(err => console.error(err));
       } else {
+        this.editedItem.createdBy = author;
         this.$http
-          .post(`/game/create`, {
-            name: this.editedItem.name,
-            createdBy: author
-          })
+          .post(`/game/create`, this.editedItem)
           .then(res => {
             _this.alertColor = "green";
             _this.closeColor = "black";

@@ -153,6 +153,7 @@ export default {
     dialogDelete: false,
     expanded: [],
     games: [],
+    gameMode: [],
     loaded: false,
     headers: [
       {
@@ -163,7 +164,6 @@ export default {
       { text: "Jeu(x) associé(s)", value: "games", dataType: "String" },
       { text: "Actions", value: "actions", sortable: false }
     ],
-    gameMode: [],
     editedIndex: -1,
     editedItem: {
       id: "",
