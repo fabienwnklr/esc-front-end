@@ -63,7 +63,7 @@
                       </v-col>
                       <v-col cols="12">
                         <!-- <v-file-input
-                          v-model="editedItem.imgUrl"
+                          v-model="editedItem.thumbnail_path"
                           show-size
                           small-chips
                           truncate-length="15"
@@ -124,6 +124,13 @@
         <span v-else>{{ item.platforms.map(g => g.name).join(", ") }} </span>
       </template>
 
+      <template v-slot:[`item.gamesMode`]="{ item }">
+        <span v-if="item.gamesMode.length === 1"
+          >{{ item.gamesMode.map(g => g.name).toString() }}
+        </span>
+        <span v-else>{{ item.gamesMode.map(g => g.name).join(", ") }} </span>
+      </template>
+
       <template v-slot:[`item.actions`]="{ item }">
         <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
         <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
@@ -180,8 +187,9 @@ export default {
         align: "start",
         value: "name"
       },
-      { text: "Platforme disponible", value: "platforms", dataType: "String" },
-      { text: "Chemin photo", value: "imgUrl", dataType: "String" },
+      { text: "Mode(s) de jeux disponible", value: "gamesMode", dataType: "String" },
+      { text: "Platforme(s) disponible(s)", value: "platforms", dataType: "String" },
+      { text: "Chemin photo", value: "thumbnail_path", dataType: "String" },
       { text: "Actions", value: "actions", sortable: false }
     ],
     platforms: [],
@@ -190,7 +198,7 @@ export default {
     editedItem: {
       id: "",
       name: "",
-      imgUrl: null,
+      thumbnail_path: null,
       createdBy: "",
       createdAt: "",
       updatedBy: "",
@@ -200,7 +208,7 @@ export default {
     defaultItem: {
       id: "",
       name: "",
-      imgUrl: "",
+      thumbnail_path: "",
       createdBy: "",
       createdAt: "",
       updatedBy: "",

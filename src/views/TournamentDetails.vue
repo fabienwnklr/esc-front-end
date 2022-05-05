@@ -5,7 +5,7 @@
         width="100%"
         height="auto"
         :eager="true"
-        :src="this.imgUrl"
+        :src="this.thumbnail_path"
         alt=""
       >
       </v-img>
@@ -18,14 +18,14 @@
 export default {
   data: () => ({
     tournamentDetails: {},
-    imgUrl: '',
+    thumbnail_path: '',
   }),
   methods: {
     getDetailsTournament() {
       this.$http(`/tournament/${this.$route.params.id}`)
         .then((res) => {
           this.tournament = res.data;
-          this.imgUrl = `../assets/${this.tournament.games[0].name.toLowerCase()}.jpg`
+          this.thumbnail_path = `../assets/${this.tournament.games[0].name.toLowerCase()}.jpg`
         })
         .catch((err) => {
           console.error(err);
