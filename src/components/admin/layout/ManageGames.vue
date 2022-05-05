@@ -18,14 +18,9 @@
           <v-toolbar-title>Jeux</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <v-btn
-                  color="primary"
-                  dark
-                  class="mb-2"
-                  @click="addItem"
-                >
-                  Ajouter
-                </v-btn>
+          <v-btn color="primary" dark class="mb-2" @click="addItem">
+            Ajouter
+          </v-btn>
           <v-dialog persistent v-model="dialog" max-width="500px">
             <v-form ref="gameEdit">
               <v-card>
@@ -46,20 +41,20 @@
                         ></v-text-field>
                       </v-col>
                       <v-col cols="12">
-                         <v-autocomplete
-                        prepend-inner-icon="mdi-magnify"
-                        v-model="editedItem.platformsAvalaible"
-                        :items="platforms"
-                        item-text="name"
-                        item-value="id"
-                        outlined
-                        no-data-text="Aucun résultats"
-                        label="Platformes disponibles"
-                        clearable
-                        multiple
-                        required
-                        :rules="requiredRules"
-                      ></v-autocomplete>
+                        <v-autocomplete
+                          prepend-inner-icon="mdi-magnify"
+                          v-model="editedItem.platformsAvalaible"
+                          :items="platforms"
+                          item-text="name"
+                          item-value="id"
+                          outlined
+                          no-data-text="Aucun résultats"
+                          label="Platformes disponibles"
+                          clearable
+                          multiple
+                          required
+                          :rules="requiredRules"
+                        ></v-autocomplete>
                       </v-col>
                       <v-col cols="12">
                         <!-- <v-file-input
@@ -187,8 +182,16 @@ export default {
         align: "start",
         value: "name"
       },
-      { text: "Mode(s) de jeux disponible", value: "gamesMode", dataType: "String" },
-      { text: "Platforme(s) disponible(s)", value: "platforms", dataType: "String" },
+      {
+        text: "Mode(s) de jeux disponible",
+        value: "gamesMode",
+        dataType: "String"
+      },
+      {
+        text: "Platforme(s) disponible(s)",
+        value: "platforms",
+        dataType: "String"
+      },
       { text: "Chemin photo", value: "thumbnail_path", dataType: "String" },
       { text: "Actions", value: "actions", sortable: false }
     ],
@@ -215,9 +218,7 @@ export default {
       updatedAt: "",
       platformsAvalaible: []
     },
-    requiredRules: [
-      (v) => !!v || "Champs requis.",
-    ],
+    requiredRules: [v => !!v || "Champs requis."]
   }),
 
   computed: {
